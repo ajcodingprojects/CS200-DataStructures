@@ -1,0 +1,9 @@
+public class GameRunner {
+    private static GameWindow gw;
+
+    public static void main (String args[]) {
+        GameLayout gl = new GameLayout("LocationsList.txt", "ConnectionsList.txt");
+        new GameWindow(gl, 1);
+
+    }
+}

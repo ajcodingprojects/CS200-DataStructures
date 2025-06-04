@@ -1,0 +1,26 @@
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ *
+ */
+public class LocationButton extends JButton {
+
+    /**
+     *
+     * @param name
+     * @param xPos
+     * @param yPos
+     * @param gw
+     */
+    public LocationButton(String name, int xPos, int yPos, GameWindow gw) {
+        super(name);
+        setBounds(xPos, yPos, 87, 40);
+        setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 8));
+        gw.add(this);
+        doClick();
+        addActionListener(event -> gw.moveToAction(name));
+        setEnabled(false);
+    }
+
+}

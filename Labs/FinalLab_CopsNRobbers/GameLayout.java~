@@ -1,0 +1,440 @@
+/*
+ * File: BookCollection.java
+ */
+
+import java.util.*;
+import java.io.*;
+
+/**
+ * Authors: Andrew Nerud and Grant Peroutka 
+ * Date: 12/1/2022
+ */
+public class GameLayout implements Serializable {
+  
+  //associates a given location label with a set of connected locations
+  private Map<String, Set<String>> connections;
+  //associates a given location with its description object
+  private Map<String, LocationDescription> descriptions;
+  //the list of high scores in the game
+  //private int[] highScores;
+  //The cop in the game
+  private Cop cop;
+  //The robber to catch in the game
+  private Robber robber;
+  // the current turn number
+  private int turnNumber;
+  //
+  private boolean fromSave;
+  
+  /*
+   * creates a new empty hashmap
+   */
+  public GameLayout(){
+    this.connections = new HashMap<>();
+    this.descriptions = new HashMap<>();
+    //this.highScores = new int[5];
+    this.cop = new Cop();
+    this.robber = new Robber();
+    this.turnNumber = 0;
+    this.fromSave = false;
+  }
+  
+  
+  /**
+   * This constructor will read in all the information for locations and
+   * insert the location name associated with this location entry into the
+   * description and connection maps. 
+   * @param locationsFile the path to the file containing the locations description information
+   * @param connectionsFile the path to the file containing the locations connections to other locations
+   */
+  
+  public GameLayout(String locationsFile, String connectionsFile) {
+    this.connections = new HashMap<>();
+    this.descriptions = new HashMap<>();
+    this.cop = new Cop();
+    this.robber = new Robber();
+    this.turnNumber = 0;
+    this.fromSave = false;
+    
+    try {
+      Scanner sc = new Scanner(new File(locationsFile)); 
+      
+      while(sc.hasNextLine()) {
+        String name = sc.nextLine();
+        if (name.equals("")) break;
+        int money = sc.nextInt();
+        sc.nextLine();
+        LocationDescription ld = new LocationDescription(name, money);
+        
+        if(!descriptions.containsKey(name))
+          descriptions.put(name,ld);
+        if (sc.hasNextLine()) sc.nextLine();
+      }
+      
+      sc = new Scanner(new File(connectionsFile)); 
+      
+      while(sc.hasNextLine()) {
+        Set<String> connectingLocations = new HashSet<String>();
+        String name = sc.nextLine();
+
+        if (name.equals("")) break;
+        int numConnections = sc.nextInt();
+
+        sc.nextLine();
+        while(numConnections > 0){
+          connectingLocations.add(sc.nextLine());
+          numConnections--;
+        }
+        if (sc.hasNextLine()) sc.nextLine();
+
+        connections.put(name,connectingLocations);
+      }
+    }
+    catch(FileNotFoundException e){
+      System.out.print(e); 
+    }
+  }
+  /*
+   * gets the keys which are the keys of the main hashmap
+   * @return Iterator<String> the key that is set which is the locations
+   */
+  public Iterator<String> allLocations(){
+    return descriptions.keySet().iterator();
+  }
+  /*
+   * uses the locationName to get its connections 
+   * @param String locationName uses the location key to get the connections 
+   * @return Iterator<String> over the connections of the given location
+   */
+  public Iterator<String> allLocationConnections(String locationName){
+    try {
+      return connections.get(locationName).iterator();
+    } catch (NullPointerException n) {
+      return null; 
+    }
+  }
+  /*
+   * gets the location description based off of the locationName 
+   * @param String locationName is uesd to get the value which is the locationDescription
+   * @return locationDescription the information for that locationName
+   */
+  public LocationDescription get(String locationName){
+    return descriptions.get(locationName);
+  }
+  /*
+   * adds a new Hashmap using the locationDescription given
+   * @param LocationDescription which holds the value/information of the location
+   */
+  public void add(LocationDescription ld){
+    String name = ld.getName();
+    descriptions.put(name, ld);
+  }
+  
+  /*
+   * updates the locationDescription of a certain location
+   * @param String name is used as a key
+   * @param String clue is used to update the clue  
+   * @param String hasClue is used to update the hasClue 
+   */
+  public void update(String name, String clue, boolean hasClue){
+    if (descriptions.containsKey(name)){
+      descriptions.get(name).setClue(clue);
+      descriptions.get(name).setHasClue(hasClue);
+    }
+  }
+  
+  /*
+   * updates the locationDescription of a certain location
+   * @param String name is used as a key
+   * @param int robbedOnTurn is used to update the robbedOnTurn
+   * @param int amtStolen is used to update the amtStolen
+   */
+  public void update(String name, int amtStolen){
+    if (descriptions.containsKey(name)){
+      descriptions.get(name).setAmtStolen(amtStolen + descriptions.get(name).getAmtStolen());
+    }
+  }
+  /*
+   * removes the locationDescription of a location
+   * @param String name indicates which location to access
+   */
+  public void remove(String name){
+    if(descriptions.containsKey(name)){
+      descriptions.remove(name);
+    }
+  } 
+  
+  /**
+   * Method to move an entity to a given location
+   * 
+   * @param entity is a PeopleEntity in the game
+   * @param location is a String of a Location in game
+   */
+  public void moveEntity(PeopleEntities entity, String location) {
+    entity.setCurrentLocation(location);
+  }
+  
+  //public void moveRobber(
+  
+  /**
+   * Method to get the current location of the cop
+   * 
+   * @return the String location the cop resides
+   */
+  public String getCopCurrentLocation() {
+    return cop.getCurrentLocation();
+  }
+  
+  /**
+   * Method to get the current location of the robber
+   * 
+   * @return the String location the robber resides
+   */
+  public String getRobberCurrentLocation() {
+    return robber.getCurrentLocation();
+  }
+  
+  
+  /*
+   * writes a new file 
+   * @param String fileName is the name of the file that is passed and created with
+   */
+  public void write(String fileName){
+    try {
+      ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+      oos.writeObject(this);
+      oos.close();
+    }
+    catch (IOException e){
+      System.out.print(e);
+    }
+  }
+
+  /*
+   * nullifies a previous save
+   * @param String fileName is the name of the file that is passed and created with
+   */
+  public void nullify(String fileName){
+    try {
+      ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+      oos.writeObject(null);
+      oos.close();
+    }
+    catch (IOException e){
+      System.out.print(e);
+    }
+  }
+  
+  /*
+   * Reads a from the saved file 
+   * @param String fileName is the name of the file that is passed and created with
+   */
+  public boolean getSaved(String fileName){
+    try {
+      ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName));
+      Object o = ois.readObject();
+      ois.close();
+      if (o == null) return false;
+      GameLayout g = (GameLayout) o;
+      this.descriptions = g.getDescriptionsMap();
+      this.connections = g.getConnectionsMap();
+      this.cop = g.getCop();
+      this.robber = g.getRobber();
+      this.turnNumber = g.getTurn();
+      this.moveCopSavedFile(g.getCopCurrentLocation());
+      this.getRobber().setCurrentLocation(g.getRobberCurrentLocation());
+      this.get(g.getRobberCurrentLocation()).setHasRobber(true);
+      this.fromSave = true;
+      return true;
+    }
+    catch (IOException | ClassNotFoundException e){
+      System.out.print(e);
+      return false;
+    }
+  }
+
+  
+  /**
+   * Method that uses breath first search to find the location of the robber
+   * 
+   * @param currentLocation a String location name that is the starting search location
+   * 
+   * @return a String of an Location name or null if no robber is found
+   */
+  public String breathRobberSearch(String currentLocation) {
+    Queue<String> locations = new LinkedList<>();
+    List<String> seen = new LinkedList<>();
+    locations.add(currentLocation);
+    seen.add(currentLocation);
+    while (!locations.isEmpty()) {
+      String currentSearch = locations.remove();
+      if (descriptions.get(currentSearch).hasRobber()) {
+        return currentSearch;
+      }
+      Iterator<String> currentConnections = allLocationConnections(currentSearch);
+      while (currentConnections != null && currentConnections.hasNext()) {
+        String next = currentConnections.next();
+        if (!seen.contains(next)) {
+          seen.add(next);
+          locations.add(next);
+        }
+      }
+    }
+    return null;
+  }
+    
+  public boolean isRobberFound() {
+    if(breathRobberSearch(getCopCurrentLocation()).equals(getCopCurrentLocation())) {
+      robberToJail();
+      return true;
+    }
+    return false;
+  }
+  
+  /*
+   * gets the description instance field map and returns it
+   */
+  private Map<String, LocationDescription> getDescriptionsMap() {
+    return this.descriptions;
+  }
+  
+  /*
+   * gets the connections instance field map and returns it
+   */
+  private Map<String, Set<String>> getConnectionsMap() {
+    return this.connections;
+  }
+  
+  /*
+   * gets the cop instance field and returns it
+   */
+  public Cop getCop() {
+    return this.cop;
+  }
+  
+  /*
+   * gets the robber instance field and returns it
+   */
+  public Robber getRobber() {
+    return this.robber;
+  }
+  
+  /**
+   * method to move the robber randomly to connected locations and steal the money
+   * 
+   * @param keepTrackRobber is a boolean that says if the robber should be tracked at the new location
+   */
+  public void moveRobber(boolean keepTrackRobber) {
+    String oldLoc = breathRobberSearch("Start");
+    List<String> possibleMoves = new LinkedList<>();
+    possibleMoves.addAll(connections.get(oldLoc));
+    possibleMoves.remove("Jail");
+    int moveTo = (int)(Math.random() * (possibleMoves.size()- 1));
+    
+    
+    String newLoc = possibleMoves.get(moveTo);
+    if (!keepTrackRobber && newLoc.equals("Minneapolis")) newLoc = moveTo-1 < 0 ? (moveTo+1 < possibleMoves.size() ? possibleMoves.get(moveTo+1) : newLoc)  : possibleMoves.get(moveTo-1);
+    robber.setCurrentLocation(newLoc);
+    LocationDescription newPos = get(newLoc);
+    newPos.setHasRobber(true);
+    get(oldLoc).setHasRobber(false);
+    
+    if(keepTrackRobber){
+      update(oldLoc, "Robber was here on turn " + turnNumber, true);
+      int moneyStolen = newPos.getMoney();
+      update(newLoc, moneyStolen);
+      robber.addToMoneyStolen(moneyStolen);
+    }
+  }
+  
+  /**
+   * method to move the cop  to selected location
+   * 
+   * @param locationToMove is a String of where the cop is moving to
+   * 
+   * @return a LocationDescription of where the cop just moved
+   */
+  public LocationDescription moveCop(String locationToMove) {
+   if (connections.get(getCopCurrentLocation()).contains(locationToMove) || getCopCurrentLocation().equals(locationToMove)) {
+     cop.setCurrentLocation(locationToMove);
+     turnNumber++;
+     return get(locationToMove);
+   }
+   return get(getCopCurrentLocation());
+  }
+
+  public LocationDescription moveCopSavedFile(String location) {
+    cop.setCurrentLocation(location);
+    return get(location);
+  }
+  
+  /**
+   * method to move the robber to jail
+   * 
+   * @return a LocationDescription of where the robber just moved
+   */
+  public LocationDescription robberToJail() {
+     robber.setCurrentLocation("Jail");
+     return get("Jail");
+  }
+  
+  /*
+   * gets the size of the hashmap
+   * @returns the size of the map
+   */
+  public int size(){
+    return descriptions.size(); 
+  }
+  
+  public int getTurn() {
+    return turnNumber;
+  }
+
+
+  public boolean isFromSave() {
+    return fromSave;
+  }
+
+  public void setFromSave(boolean fromSave) {
+    this.fromSave = fromSave;
+  }
+
+  /*
+   * driver that tests the methods that we created above
+   */
+  public static void main(String args[]) {
+    System.out.println("********************TestWriting*********************");
+    GameLayout lay1 = new GameLayout("LocationsList.txt", "ConnectionsList.txt");
+    print(lay1);
+    lay1.write("WriteTest.txt");
+    
+    
+    System.out.println("*********************TestReading********************");
+    GameLayout lay2 = new GameLayout();
+    lay2.getSaved("WriteTest.txt");
+    print(lay2);
+    
+    System.out.println("********************TestUpdating********************");
+    lay1.update("Minneapolis", 120);
+    System.out.println(lay1.get("Minneapolis"));
+    
+    System.out.println("*********************TestAdding*********************");
+    LocationDescription newLoc = new LocationDescription("New Land",1000);
+    lay1.add(newLoc);
+    System.out.println(lay1.get("New Land"));
+    
+    System.out.println("*********************TestRemove*********************");
+    lay1.remove("New Land");
+    print(lay1);
+    
+  }
+  /**
+   * This is a helper method to print all locations and their details 
+   * @param gl is the passed gameLayout to print
+   */ 
+  public static void print(GameLayout gl) {
+    for (LocationDescription ld : gl.getDescriptionsMap().values()) {
+      System.out.println(ld +"\n");
+    }
+  }
+}

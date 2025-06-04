@@ -1,0 +1,42 @@
+/**
+ * Subclass of PeopleEntities
+ * 
+ */
+
+import java.io.*;
+import java.util.*;
+
+/**
+ * Grant Peroutka and Andrew Nerud
+ */
+public class Robber extends PeopleEntities {
+  
+  //Total amount of money stolen from cities
+  private int moneyStolen;
+  
+  /**
+   * Default constructor for a cop object
+   */
+  public Robber() {
+    super();
+  }
+  
+  /**
+   * Get the current money robber has stole
+   */
+  public int getMoneyStolen() {
+    return moneyStolen;
+  }
+  
+  /**
+   * Adds money to the current money
+   * 
+   * @param amountToAdd a int of a new amount of money
+   */
+  public void addToMoneyStolen(int amountToAdd) {
+    this.moneyStolen += amountToAdd;
+  }
+  
+  
+  
+}

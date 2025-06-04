@@ -1,0 +1,115 @@
+Collegeville
+4
+St. Joe
+Brainerd
+Maple Grove
+Jail
+
+St. Joe
+4
+Collegeville
+Brainerd
+Maple Grove
+Jail
+
+Brainerd
+4
+Duluth
+Collegeville
+St. Joe
+Jail
+
+Duluth
+4
+Brainerd
+St. Paul
+Rochester
+Jail
+
+Maple Grove
+4
+St. Joe
+Minnetonka
+Minneapolis
+Jail
+
+Minneapolis
+6
+Maple Grove
+St. Paul
+Minnetonka
+Burnsville
+Rosemount
+Jail
+
+St. Paul
+4
+Minneapolis
+Duluth
+Rosemount
+Jail
+
+Minnetonka
+4
+Minneapolis
+Maple Grove
+Burnsville
+Jail
+
+Burnsville
+5
+Minnetonka
+Minneapolis
+New Prague
+Lakeville
+Jail
+
+Rosemount
+4
+St. Paul
+Minneapolis
+Lakeville
+Jail
+
+New Prague
+4
+Burnsville
+Lakeville
+Fairbault
+Jail
+
+Lakeville
+5
+Burnsville
+New Prague
+Fairbault
+Rosemount
+Jail
+
+Fairbault
+5
+Lakeville
+New Prague
+Rochester
+Mankato
+Jail
+
+Rochester
+3
+Mankato
+Fairbault
+Jail
+
+Mankato
+4
+Fairbault
+Rochester
+Minnetonka
+Jail
+
+Start
+1
+Minneapolis
+
+Jail
+0

@@ -1,0 +1,16 @@
+Collegeville,190,480
+Minneapolis,350,650
+St. Joe,210,530
+St. Paul,455,655
+Rosemount,450,700
+Minnetonka,255,686
+Maple Grove,275,600
+New Prague,260,790
+Lakeville,355,760
+Burnsville,354,705
+Fairbault,350,852
+Rochester,515,860
+Mankato,190,855
+Duluth,515,390
+Brainerd,190,400
+end
