@@ -1,0 +1,225 @@
+package mydatastructures;
+
+
+public class BinarySearchTree < E extends Comparable <E>> implements BSTInterface <E>{
+  
+  protected BSTNode root;
+  
+  public BinarySearchTree() {
+    this.root = new BSTNode();
+  }
+  
+  public BinarySearchTree(BSTNode root) {
+    this.root = root;
+  }
+  
+//*******************************************************************************************************************    
+//Exercise 0: ********** This is already almost complete. READ,  UNDERSTAND and COMPLETE private version
+//*******************************************************************************************************************    
+  public boolean contains(E target) {
+    return this.contains(target, this.root) ;
+  } 
+  
+  private boolean contains(E target,BSTNode current) { // COMPLETE THIS VERSION
+    if(current.isTerminal()){
+      return false;
+    }
+    
+    int comp = current.element.compareTo(target);
+    if (comp == 0) {
+      return true;
+    } else if (comp < 0) {
+      return this.contains(target, current.right);
+    } else {
+      return this.contains(target, current.left);
+    }
+  } 
+  
+//*******************************************************************************************************************    
+//Exercise 1:*********************COMPLETE CORRESPONDING private recursive version***********************************
+//           *********************  USE FUNCTIONAL RECURSIONN *******************************************************
+//*******************************************************************************************************************    
+  public boolean add(E element) {
+    return this.add(element, this.root); 
+  }
+  
+  private boolean add(E element, BSTNode current){ // COMPLETE THIS VERSION
+    if (current.isTerminal()) {
+      current.element = element;
+      current.left = new BSTNode();
+      current.right = new BSTNode();
+      return true;
+    } 
+    int comp = current.element.compareTo(element);
+    if (comp == 0) {
+      return false;
+    } else {
+      return this.add(element, comp < 0 ? current.right : current.left);
+    }
+  }
+  
+  
+//*******************************************************************************************************************    
+//Exercise 2:*************** CREATE, COMPLETE and CALL CORRESPONDING private recursive version*********************** 
+//           *********************  USE FUNCTIONAL RECURSIONN *******************************************************  
+//*******************************************************************************************************************    
+  /** 
+   * starts at root and creates list displaying inorder traversal of tree: INCLUDE A SINGLE SPACE BETWEEN ANY TWO VALUES
+   * foreach node: 
+   *     process left child recursively, 
+   *     process node element, and then
+   *     process right child recursively.
+   */    
+  public String inOrderTraverse() {
+    if(root.isTerminal())
+     return "";
+    return this.inOrderTraverse(this.root);
+  }
+  
+  /*
+   * PRIVATE VERSION GOES HERE
+   */ 
+  private String inOrderTraverse(BSTNode current){ 
+   return (current.left.isTerminal() ? "" : (inOrderTraverse(current.left) + " "))
+      + current.element
+      + (current.right.isTerminal() ? "" : (" " + inOrderTraverse(current.right)));
+  }
+  
+  
+//******************************************************************************************************************* 
+//Exercise 3:*************** CREATE, COMPLETE and CALL CORRESPONDING private recursive version*********************** 
+//           *********************  USE FUNCTIONAL RECURSIONN *******************************************************  
+//*******************************************************************************************************************    
+  /** 
+   * starts at root and creates list displaying preorder traversal of tree: INCLUDE A SINGLE SPACE BETWEEN ANY TWO VALUES
+   * foreach node: 
+   *     process node element,
+   *     process left child recursively, and then
+   *     process right child recursively.
+   */    
+ public String preOrderTraverse() {
+   if(root.isTerminal())
+     return "";
+    return this.preOrderTraverse(this.root);
+  }
+  
+  /*
+   * PRIVATE VERSION GOES HERE
+   */ 
+  private String preOrderTraverse(BSTNode current){ 
+   return current.element
+      + (current.left.isTerminal() ? "" : (" " + preOrderTraverse(current.left))) 
+      + (current.right.isTerminal() ? "" : (" " + preOrderTraverse(current.right)));
+  }
+  
+//*******************************************************************************************************************  
+//Exercise 4:*************** CREATE, COMPLETE and CALL CORRESPONDING private recursive version***********************
+//           *********************  USE FUNCTIONAL RECURSIONN *******************************************************  
+//*******************************************************************************************************************    
+  /** 
+   * starts at root and creates list displaying postorder traversal of tree: INCLUDE A SINGLE SPACE BETWEEN ANY TWO VALUES
+   * foreach node: 
+   *     process left child recursively, 
+   *     process right child recursively,and then
+   *     process node element,
+   */   
+  public String postOrderTraverse() {
+    if(root.isTerminal())
+     return "";
+    return this.postOrderTraverse(this.root);
+  }
+  
+  /*
+   * PRIVATE VERSION GOES HERE
+   */ 
+  private String postOrderTraverse(BSTNode current){  
+    return (current.left.isTerminal() ? "" : (postOrderTraverse(current.left) + " ")) 
+      + (current.right.isTerminal() ? "" : (postOrderTraverse(current.right) + " ")) 
+      + current.element;
+  }
+  
+//*******************************************************************************************************************  
+//Exercise 5:*********************** COMPLETE and CALL CORRESPONDING private recursive version*********************** 
+//           *********************  USE FUNCTIONAL RECURSIONN *******************************************************  
+//*******************************************************************************************************************    
+  public String toString() {
+    if (root.isTerminal())
+      return "";
+    return this.toString(0, this.root);
+  }
+  /** 
+   * Displays complete tree starting at root
+   * Foreach node, it displays node element, followed by left child
+   * followed by right child: THIS IS KNOWN AS PREORDER TREE
+   * TRAVERSAL. It also includes proper indentation
+   * 
+   * For example the following BST (please note that X's denote empty terminal nodes)
+   *                       12
+   *                   /       \
+   *                 9          17
+   *               /   \        /  \
+   *              8     11     X   25
+   *            /  \   /  \       /  \  
+   *           X   X  10   X     X    X
+   *                 /  \
+   *                X    X
+   * would display like the following:*** INCLUDE A SINGLE SPACE AFTER EACH > CHARACTER ***
+   * 
+   * > 12
+   * > > 9
+   * > > > 8
+   * > > > > X 
+   * > > > > X 
+   * > > > 11
+   * > > > > 10
+   * > > > > > X 
+   * > > > > > X 
+   * > > > > X 
+   * > > 17
+   * > > > X 
+   * > > > 25
+   * > > > > X 
+   * > > > > X 
+   */    
+  
+  private String toString(int depth,BSTNode current){ // COMPLETE THIS VERSION
+    //create an indentation string (using depth parameter) to indent tree nodes properly in order to look like a tree 
+    //indentation string should be printed before an element is
+    String indentation = "";
+    for (int i = 0; i <= depth; i++) {
+      indentation += "> ";
+    }
+
+    return indentation + 
+      (null == current || current.isTerminal() 
+         ? "X\n" 
+         : current.element +"\n" + toString(depth+1, current.left) + toString(depth+1, current.right));       
+  } 
+  
+  
+  private  class BSTNode {   
+    /** The information stored in this node. */
+    private E element;
+    /** Reference to the left child. */
+    private BSTNode left;
+    /** Reference to the right child. */
+    private BSTNode right;
+    
+    private BSTNode() { 
+    }
+    
+    private BSTNode(E element) {
+      this.element = element;
+    }
+    
+    private BSTNode(E element, BSTNode left, BSTNode right){
+      this.element = element;
+      this.left = left;
+      this.right = right;
+    }
+    
+    private boolean isTerminal(){
+      return this.element == null && this.left == null && this.right == null;
+    } 
+  }  
+}

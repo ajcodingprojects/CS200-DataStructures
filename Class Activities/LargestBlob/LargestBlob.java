@@ -1,0 +1,81 @@
+import java.awt.*;
+import java.util.*;
+
+public class LargestBlob implements GridColors {
+  
+  /** The grid */
+  private TwoDimGrid grid;
+  
+  /** Constructors */
+  public LargestBlob(TwoDimGrid grid) {
+    this.grid = grid;
+  }
+  
+   /*PART 0: ALREADY DONE      ***************************************************************************************
+   *        read and understand */ 
+  
+  /** Finds the number of cells in the LargestBlob at (col,row).
+    * pre: Abnormal cells are in ILLEGAL/RED color;
+    *      Other cells are in LEGAL/WHITE color.
+    * post: All cells in any blob are in the PATH/GREEN color.
+    * @param row The row-coordinate of a LargestBlob cell 
+    * @param col The col-coordinate of a LargestBlob cell
+    */
+  public int countCells(int row, int col, Color color) {
+    if (row < 0 || row >=  this.grid.getNRows() || col < 0 || col >= this.grid.getNCols()){
+      return 0;
+    }
+    else if (! this.grid.getColor(row, col).equals(ILLEGAL)){
+      return 0;
+    }
+    else {
+      this.grid.recolor(row, col, color);//MARK IT SO AS NOT TO COUNT IT AGAIN
+      return 1 + countCells( row-1, col-1, color ) + countCells( row-1, col, color ) + countCells( row-1, col+1, color )
+               + countCells( row  , col-1, color ) + countCells( row  , col+1, color )
+               + countCells( row+1, col-1, color ) + countCells( row+1,col, color  ) + countCells( row+1, col+1, color );
+    }
+  }  
+  
+  /*PART 1: ALREADY DONE      ****************************************************************************************
+   *        user-friendly version is complete */  
+  
+  public int findLargestBlob() {
+    return this.findLargestBlob(0,0,0);
+  }
+  
+  /*PART 2: COMPLETE ME  *********************************************************************************************
+   *        recusive version, with extra params, is incomplete */
+  
+  private int findLargestBlob(int  row, int col, int largestSoFar) {
+    System.out.println("row=" + row + " , col=" + col ); 
+    /*
+     * if all grid cells have been visited; return largest found so far
+     * else
+     *    generate a new color for the new blob using the following
+     * 
+                    Color theNextRandomColor = new Color((new Random()).nextInt(256), 
+                                                         (new Random()).nextInt(256),
+                                                         (new Random()).nextInt(256));
+                                           
+     *    count and color cells in new blob starting at (row,col) using method countCells
+     *    update largestSoFar accordingly
+     *    recursively call method on the next cell 
+     *       moving left to right horizontally as long as we're not at last column
+     *       otherwise, move down one row and start at first column
+     */ 
+    
+    if (row < 0 || col < 0) {
+      return 0;
+    } else if (col >= this.grid.getNCols()) {
+      return findLargestBlob(row+1, 0, largestSoFar);
+    } else if (row >= this.grid.getNRows()) {
+      return largestSoFar;
+    } else {
+      Color theNextRandomColor = new Color((new Random()).nextInt(256), 
+                                                         (new Random()).nextInt(256),
+                                                         (new Random()).nextInt(256));
+      int largest = countCells(row, col, theNextRandomColor);
+      return findLargestBlob(row, col+1, largest > largestSoFar ? largest : largestSoFar);
+    }
+  }
+}

@@ -1,0 +1,168 @@
+/** A recursive linked list class with recursive methods.*/
+package mystructures;
+
+import java.util.*;
+
+@SuppressWarnings("unchecked")
+public class LinkedListRec <E> implements SimpleList<E> {
+  
+  /** The list head */
+  private Node head;
+  
+  public LinkedListRec(){
+    this.head = new Node(); 
+  }
+  
+ public int size() {
+    return this.size(this.head);
+  }
+  
+  private int size(Node currentNode) {
+    if (currentNode.isTerminal())
+      return 0;
+    return 1 + this.size(currentNode.next);
+  }
+  
+  
+  public String toString() {
+    return this.toString(this.head);
+  } 
+  
+  private String toString(Node currentNode) {
+    if (currentNode.isTerminal())
+      return "|TERMINAL|";     
+    return currentNode.element + "->" + this.toString(currentNode.next);
+  } 
+  
+  public void append(E element) {
+    this.append(element, this.head); 
+  }
+  
+  private void append(E element, Node currentNode) {
+    if (currentNode.isTerminal()){
+      currentNode.element = element;
+      currentNode.next = new Node();
+    }
+    else
+      this.append(element, currentNode.next); // Add to rest of list
+  }
+  
+  public E get(int index){
+    if(index>= size() || index <0)
+      throw new IllegalArgumentException();
+    return this.get(index, this.head);
+  }
+  
+  private E get(int index,Node currentNode){
+    if(currentNode.isTerminal())
+      return null;
+    else if(index == 0)
+      return currentNode.element;
+    else
+      return this.get(index-1, currentNode.next);
+  }
+  
+  public ListIterator<E> iterator(){ 
+    return new InternalListIterator(); 
+  }    
+  
+  /** A Node is the building block for a single-linked list. */
+  private class Node {
+    /** The reference to the data element. */
+    private E element;
+    
+    /** The reference to the next node. */
+    private Node next;
+    
+    // Constructors
+    /** 
+     * Creates a new empty node with null next and element fields.
+     */
+    private Node() {
+    }
+    
+    /** 
+     * Creates a new node with a null next field.
+     * @param element The data stored
+     */
+    private Node(E element) {
+      this.element = element;
+    }
+    
+    /** Creates a new node that references another node
+      * @param element The data stored
+      * @param next The node referenced by new node
+      */
+    private Node(E element, Node  next) {
+      this.element = element;
+      this.next = next;
+    }
+    
+    /** 
+     * Returns true if the node has null data and next instance fields which
+     * is used to designate the "terminal" node in this structure .
+     * 
+     * @return true if this node is a "terminal" node
+     */    
+    private boolean isTerminal(){
+      return this.element == null && this.next == null;
+    }   
+  } //end class Node
+  
+    
+  private class InternalListIterator implements ListIterator<E>{
+    
+    //READ FROM HERE: ********************************************************************************************
+    private int currentIndex;
+    
+    public InternalListIterator() {
+      this.currentIndex = 0;
+    }
+    
+    public boolean hasNext() {
+      return this.currentIndex < size();
+    }
+    
+    public E next() {
+      if(!this.hasNext()){
+        throw new NoSuchElementException();
+      }
+      E elementToReturn = get(currentIndex);
+      this.currentIndex++;
+      return elementToReturn;
+    } 
+    
+    public int nextIndex(){
+      return this.currentIndex;
+    }    
+    
+    public void set(E e) {
+      throw new UnsupportedOperationException("Can't set using iterators");
+    }       
+    public void add(E e) {
+      throw new UnsupportedOperationException("Can't add using iterators");
+    }    
+    
+    public void remove() {
+      throw new UnsupportedOperationException("Can't remove using iterators");
+    }
+    
+    //READ TO HERE: ******************************************************************************************** 
+    
+    public boolean hasPrevious() {
+      //COMPLETE ME: ********************************************************************************************
+      return false;
+    }
+    
+    public int previousIndex(){
+      //COMPLETE ME: ********************************************************************************************
+      return -1;
+    }
+    
+    public E previous() {
+      //COMPLETE ME: ********************************************************************************************
+      return null;
+    }      
+    
+  }//end inner class InternalListIterator  
+}

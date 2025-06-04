@@ -1,0 +1,50 @@
+Collegeville
+5
+
+Minneapolis
+100
+
+St. Joe
+20
+
+St. Paul
+90
+
+Rosemount
+50
+
+Minnetonka
+75
+
+Maple Grove
+40
+
+New Prague
+30
+
+Lakeville
+75
+
+Burnsville
+80
+
+Fairbault
+20
+
+Rochester
+95
+
+Mankato
+80
+
+Duluth
+95
+
+Brainerd
+50
+
+Start
+0
+
+Jail
+0

@@ -1,0 +1,134 @@
+/*
+ * File: AJNLinkedStack.java
+ */
+package ajnstructures;
+
+import java.util.*;
+import zhstructures.*;
+
+/**
+ * Class implementing a ZHStack using an internal
+ * one-way linked structure/node.
+ * 
+ * @author I. Rahal, J. A. Whitford Holey, and Andrew Nerud, Colin Glynn
+ * @version October 12, 2022
+ */
+public class AJNLinkedStack<ElementType> implements ZHStack<ElementType> {
+  
+  /**
+   * The number of elements in this stack.
+   */
+  private int size = 0;
+  /**
+   * A reference to the top node in this stack.
+   */
+  private StackNode top;
+  
+  /**
+   * Creates a new empty stack.
+   */
+  public AJNLinkedStack() {
+    this.top = new StackNode();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */ 
+  public ElementType peek() {
+    if (isEmpty()) 
+      throw new NoSuchElementException();
+    return top.getElement();
+  }
+  
+  
+  /**
+   * {@inheritDoc}
+   */ 
+  public void push(ElementType element) {
+    if (element == null) 
+      throw new IllegalArgumentException();
+    StackNode newNode = new StackNode(element, top);
+    top = newNode;
+    size++;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */ 
+  public ElementType pop() {
+    if (isEmpty()) 
+      throw new NoSuchElementException();
+    ElementType popped = top.getElement();
+    top = top.getNext();
+    size--;
+    return popped;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */ 
+  public boolean isEmpty() {
+    return size <= 0;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */ 
+  public int size() {
+    return size;
+  }
+    
+  /**
+   * {@inheritDoc}
+   */ 
+  public boolean contains(ElementType element) {
+    for(ElementType e : this) {
+      if (e.equals(element)) return true;
+    }
+    
+    return false;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */ 
+  public Iterator<ElementType> iterator() {
+    return this.top.iterator();
+  }
+  
+  /**
+   * Inner class to implement nodes used to build the ZHStack ADT.
+   * 
+   * Inherited methods:
+   *   contains()
+   *   isEmpty()
+   *   size()
+   *   iterator()
+   *   
+   *   //the remaining methods allow you to access StackNode's element and next
+   *   ElementType getElement()
+   *   void setElement(ElementType element)
+   *   StackNode getNext()
+   *   void setNext(StackNode next)
+   * 
+   */
+  protected class StackNode extends ZHOneWayListNode<ElementType, StackNode> {
+    
+    /**
+     * Creates a new empty node.
+     */
+    protected StackNode() {
+      super();
+    }
+    
+    /**
+     * Creates a new node with the specified data element and next node.
+     * 
+     * @param element the data element for the new node
+     * @param next the next node for the new node
+     */
+    protected StackNode(ElementType element, StackNode next) {
+      super(element, next);
+    }
+  }
+}

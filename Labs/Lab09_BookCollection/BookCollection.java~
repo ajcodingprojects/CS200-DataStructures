@@ -1,0 +1,198 @@
+/*
+ * File: BookCollection.java
+ */
+
+ 
+import java.util.*;
+import java.io.*;
+
+/**
+ * Class BookCollection
+ * 
+ * @author Andrew Nerud, Colin Glynn
+ * @version TODAY'S 11/16/22
+ */
+public class BookCollection {
+  
+  /**
+   * library is a Map associating authors (the String) with the
+   * collection of books they have written (the map of BookDescription).
+   */ 
+  private HashMap<String, HashMap<String, BookDescription>> library;
+  
+  /**
+   * This constructor will read in all the information for books and
+   * insert the author name associated with this book entry into the
+   * library. You will need to organize your file in such a way that
+   * this is reasonably easy to do. I have included a very short
+   * sample library showing one way to organize. (I use a _ to separate
+   * one book from the next.)
+   * 
+   * @param fileName the path to the file containing the book information
+   * @throws FILL IN APPROPRIATE EXCEPTION INFORMATION.
+   */
+  public BookCollection(String fileName) {
+    this.library = new HashMap<>();
+    try {
+      Scanner sc = new Scanner(new File(fileName)); 
+      
+      while(sc.hasNextLine()) {
+        String author = sc.nextLine();
+        String title = sc.nextLine();
+        String publisher = sc.nextLine();
+        int date = sc.nextInt();
+        sc.nextLine();
+        char rating = sc.nextLine().charAt(0);
+        int pages = sc.nextInt();
+        sc.nextLine();
+        String desc = "";
+        String nextDesc = sc.nextLine();
+        while(!nextDesc.equals("_")) {
+          desc += nextDesc + " ";
+          nextDesc = sc.nextLine();
+        }
+        BookDescription nextBook = new BookDescription(author, title, publisher, date, rating, pages, desc);
+        
+        if (!library.containsKey(author))
+          library.put(author, new HashMap<>());
+        if (!library.get(author).containsKey(title))
+          library.get(author).put(title, nextBook);
+        
+      }
+      sc.close();
+    } catch (FileNotFoundException e) {
+      System.out.println(e);
+    }
+  }
+  
+  /**
+   * The default constructor for the class
+   */
+  public BookCollection() {
+    this.library = new HashMap<>();
+  }
+  
+  // put in appropriate methods
+  /**
+   * Retruns an iterator over all authors in the library
+   * 
+   * @return Iterator
+   */
+  public Iterator<String> allAuthors() {
+    return library.keySet().iterator();
+  }
+  
+  /**
+   * Retruns an iterator over all titles for a given author in the library
+   * 
+   * @param author is the String given to search for book titles
+   * @return Iterator
+   */
+  public Iterator<String> allAuthorTitles(String author) {
+    try {
+      return library.get(author).keySet().iterator();
+    } catch (NullPointerException n) {
+      return null; 
+    }
+  }
+  
+  /**
+   * Retruns a BookDescription over a given title and author in the library
+   * 
+   * @param author is the String given 
+   * @param title is the String given to search for book description
+   * @return Iterator
+   */
+  public BookDescription get(String author, String title) {
+    try {
+      return library.get(author).get(title); 
+    } catch (NullPointerException n) {
+      return null; 
+    }
+  }
+  
+  /**
+   * Adds the given BookDescription object to the collection in the author's inner map
+   * 
+   * @param bd is the given BookDescription
+   */
+  public void add(BookDescription bd) {
+    if (!library.containsKey(bd.getAuthor()))
+      library.put(bd.getAuthor(), new HashMap<>());
+    library.get(bd.getAuthor()).put(bd.getTitle(), bd);
+  }
+  
+  /**
+   * Removes the BookDesciption of the given author and title
+   * 
+   * @param author is the given author key
+   * @param title is the given title key
+   */
+  public void remove(String author, String title) {
+    if(library.containsKey(author) && library.get(author).containsKey(title)) 
+      library.get(author).remove(title);
+  }
+  
+  /**
+   * updates the BookDesciption of the given author and title and new description
+   * 
+   * @param author is the given author key
+   * @param title is the given title key
+   * @param description is a string of the new book description
+   */
+  public void update(String author, String title, String description) {
+    if(library.containsKey(author) && library.get(author).containsKey(title))
+      library.get(author).get(title).setDescription(description);
+  }
+  
+  
+  /**
+   * this method writes the book description to a given file
+   * 
+   * @param fileName is the given filename to write to 
+   */
+  public void write(String fileName) {
+    try {
+      PrintWriter pw = new PrintWriter(new File(fileName));
+      for (String author: library.keySet()) {
+        for (String title: library.get(author).keySet()) {
+          pw.println(library.get(author).get(title));
+          pw.println("_");
+        }
+      }
+      pw.close();
+    } 
+    catch (FileNotFoundException e) {
+      System.out.println(e); 
+    }
+  }
+  
+  /**
+   * checks if the collection is empty 
+   * 
+   * @returns ture if the collection is empty
+   */
+  public boolean isEmpty() {
+    return library.isEmpty();
+  }
+  
+  /**
+   * gets the size of the book collection
+   * 
+   * @returns the size of the collection as an integer
+   */
+  public int size() {
+    return library.size(); 
+  }
+  
+  /**
+   * Programs main method / driver class
+   */
+  public static void main (String args[]) {
+    BookCollection bc = new BookCollection("sampleLibrary.BookCollection");
+    //all author names 
+  }
+  
+}
+
+

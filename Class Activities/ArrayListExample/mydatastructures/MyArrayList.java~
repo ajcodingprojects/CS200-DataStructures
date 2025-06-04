@@ -1,0 +1,111 @@
+package mydatastructures;
+/** 
+ * This class implements some of the methods of the Java ArrayList class
+ * @author I Rahal
+ * @verion 2022
+ */
+
+public class MyArrayList < ExpectedType > implements MyList< ExpectedType >{
+  /** 
+   * The default initial capacity 
+   */
+  private static final int INITIAL_CAPACITY =3;
+  
+  /** 
+   * The underlying data array 
+   */
+  private ExpectedType[] theData;
+  
+  /** 
+   * The current size 
+   */
+  private int size = 0;
+  
+  /** 
+   * The current capacity 
+   */
+  private int capacity = 0;
+  
+  /** 
+   * Construct an empty MyArrayList with the default initial capacity
+   */
+  public MyArrayList() {
+    capacity = INITIAL_CAPACITY;
+    //theData = new ExpectedType[capacity];
+    //theData = new Object[capacity];
+    theData = (ExpectedType[])new Object[capacity];
+  }
+  
+  /** 
+   * {@inheritDoc}
+   */
+  public boolean add(ExpectedType anEntry) {
+    if (size == capacity) {
+      reallocate();
+    }    
+    theData[size++] = anEntry;
+    return true;
+  }
+  
+  /** 
+   * {@inheritDoc}
+   */
+  public ExpectedType get(int index) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("for index : " + index);
+    }    
+    return theData[index];
+  }
+  
+  /** 
+   * {@inheritDoc}
+   */
+  public ExpectedType set(int index, ExpectedType newValue) {
+    if (index < 0 || index >= size) {
+      throw new IndexOutOfBoundsException("for index : " + index);
+    }
+    ExpectedType oldValue = theData[index];
+    theData[index] = newValue;
+    return oldValue;
+  }
+  
+  /** 
+   * {@inheritDoc}
+   */
+  public int size() {
+    return size;
+  }
+  
+  /** 
+   * {@inheritDoc}
+   */
+  public ExpectedType remove(int index) {
+    //COMPLETE ME ***************************************************************************************************    
+    return null;
+  }
+  
+  /** 
+   * {@inheritDoc}
+   */
+  public boolean add(int index,ExpectedType anEntry) {
+    //COMPLETE ME ***************************************************************************************************
+    // starter code below; copied from boolean add(ExpectedType anEntry)
+    if (size == capacity) {
+      reallocate();
+    }
+    theData[size] = anEntry;
+    size++;
+    //
+    return false;
+  }
+  
+  /** 
+   * Allocate a new array to hold the directory
+   */
+  private void reallocate() {
+    capacity = 2 * capacity;
+    ExpectedType[] newData = (ExpectedType[]) new Object[capacity];
+    System.arraycopy(theData, 0, newData, 0, size);
+    theData = newData;
+  }  
+}

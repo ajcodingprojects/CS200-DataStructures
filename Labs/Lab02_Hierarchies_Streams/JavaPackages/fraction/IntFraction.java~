@@ -1,0 +1,136 @@
+/*
+ * Fraction.java
+ */
+
+package fraction;
+
+/** 
+ * Fraction is an interface for objects that represent rational numbers
+ * as fractions
+ * 
+ * @author Andrew Nerud and Grant Peroutka
+ * @version 9-7-2022
+ */
+public class IntFraction implements Fraction {
+  /**
+   * Numerator for fraction
+   */
+  private int numerator;
+  
+  /**
+   * Denominator for fraction
+   */
+  private int denominator;
+  
+  /**
+   * Default constructor that sets numerator to zero and denominator to one
+   */
+  public IntFraction(){
+    this.numerator = 0;
+    this.denominator = 1;
+    
+  }
+  
+   /**
+   * Default constructor that sets numerator to @param numerator and denominator to one
+   * 
+   * @param numerator an int value as a fractions numerator
+   */
+  public IntFraction(int numerator){
+    this.numerator = numerator;
+    this.denominator = 1;
+    
+  }
+  
+  
+   /**
+   * Default constructor that sets numerator to @param numerator and denominator to @param denominator
+   * 
+   * @param numerator an int value as a fractions numerator
+   * @param denominator an int value as a fractions denominator
+   */
+  public IntFraction(int numerator, int denominator){
+    this.numerator = numerator;
+    if (denominator == 0) throw new IllegalArgumentException("Need a non-zero denominator");
+    this.denominator = denominator;
+    
+  }
+  
+  
+   /**
+   * {@inheritDoc}
+   */
+  public int getNumerator(){
+    return numerator;
+  
+  }
+  
+   /**
+   * {@inheritDoc}
+   */
+  public int getDenominator(){
+   return denominator; 
+    
+  }
+  
+   /**
+   * {@inheritDoc}
+   */
+  public Fraction addToThis(Fraction addend){
+    if (this.denominator == addend.denominator)
+      return  new IntFraction(this.numerator + addend.numerator, this.denominator);
+    int totalNumerator = this.numerator * addend.denominator + addend.numerator * this.denominator;
+    int totalDenominator = this.denominator * addend.denominator;
+    return  new IntFraction(totalNumerator, totalDenominator);
+    
+  }
+  
+   /**
+   * {@inheritDoc}
+   */
+  public Fraction subtractFromThis(Fraction subtrahend){
+    if (this.denominator == addend.denominator)
+      return  new IntFraction(this.numerator - subtrahend.numerator, this.denominator);
+    int totalNumerator = this.numerator * subtrahend.denominator - subtrahend.numerator * this.denominator;
+    int totalDenominator = this.denominator * subtrahend.denominator;
+    return  new IntFraction(totalNumerator, totalDenominator);
+    
+  }
+  
+  
+ /**
+   * {@inheritDoc}
+   */
+  public Fraction multiplyThisBy(Fraction multiplier){
+    int totalNumerator = this.numerator * multiplier.numerator;
+    int totalDenominator = this.denominator * multiplier.denominator;
+    return  new IntFraction(totalNumerator, totalDenominator);
+  }
+   /**
+   * {@inheritDoc}
+   */
+    public Fraction divideThisBy(Fraction divisor){
+      int totalNumerator = this.numerator * divisor.denominator;
+      int totalDenominator = this.denominator * divisor.numerator;
+      return  new IntFraction(totalNumerator, totalDenominator);
+      
+    }
+  
+   /**
+   * {@inheritDoc}
+   */
+    public boolean equals(Object other){
+      double thisVal = ((double)this.numerator)/this.denominator;
+      try {
+        Fraction otherFraction = (Fraction) other;
+        double otherVal = ((double)otherFraction.numerator)/otherFraction.denominator;
+        return thisVal == otherVal;
+      } catch (ClassCastException cce) {
+        return false;
+      }
+      
+    }
+  
+
+  
+}

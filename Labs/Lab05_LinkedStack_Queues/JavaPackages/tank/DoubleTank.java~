@@ -1,0 +1,107 @@
+/*
+ * File: DoubleTank.java
+ */
+
+//NOTE: include appropriate package specification
+
+/** 
+ * Class DoubleTank implements interface Tank
+ * 
+ * @author YOUR NAMES go here
+ * @version TODAY'S DATE
+ */
+
+public class DoubleTank implements ??? { //NOTE: specify interface name after "implements"
+  
+  /**
+   * A constant to hold default capacity used when creating 
+   * a DoubleTank using default (or no parameter) contructor
+   */
+  public final static double DEFAULT_CAPACITY = 100.0;
+  
+  
+  // NOTE: Add private class fields as needed, each
+  //        preceded by a brief javadoc description
+  //        similar to the constant above
+  
+   
+  
+  /**
+   * Default no parameter constructor: Sets level to 0.0 and 
+   * capacity to constant DEFAULT_CAPACITY
+   */
+  public DoubleTank(){
+    // NOTE:Your method implementation goes here
+  }
+  
+  
+  /**
+   * NOTE: Put general description of the constructor here
+   *
+   * @param parameter-name followed by description of parameter  // delete if not needed
+   * @throws exception-name followed by clear description 
+   *         of condition(s) leading to exception being thrown   // delete if not needed
+   */
+  public DoubleTank(double capacity) {
+    // NOTE: Your method implementation goes here
+  }
+  
+  /**
+   * NOTE: Put general description of the constructor here
+   *
+   * @param parameter-name followed by description of parameter  // delete if not needed
+   * @return description of the return value                     // delete if not needed
+   * @throws exception-name followed by clear description 
+   *         of condition(s) leading to exception being thrown   // delete if not needed
+   */
+  public String toString(){
+    // NOTE: Your method implementation goes here 
+  }
+  
+  
+   // Instead of repeating the same javadoc from the implemented
+   // interface, Tank, the following tag allows us to simply inherit it
+  
+  /** 
+   * {@inheritDoc} 
+   */
+  public boolean isEmpty(){
+   // NOTE: Your method implementation goes here
+  }
+  
+  /**
+   * {@inheritDoc}
+   */  
+  public boolean isFull(){
+   // NOTE: Your method implementation goes here
+  }
+  
+  /**
+   * {@inheritDoc}
+   */  
+  public double getCapacity(){
+    // NOTE: Your method implementation goes here
+  }
+  
+  /**
+   * {@inheritDoc}
+   */  
+  public double getLevel(){
+    // NOTE: Your method implementation goes here
+  }
+  
+  /**
+   * {@inheritDoc}
+   */  
+  public void add(double amount){
+    // NOTE: Your method implementation goes here
+  }
+  
+  /**
+   * {@inheritDoc}
+   */  
+  public void remove(double amount){
+    // NOTE: Your method implementation goes here
+  }  
+  
+}

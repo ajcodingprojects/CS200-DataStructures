@@ -1,0 +1,112 @@
+import java.util.*;
+import java.util.stream.*;
+import worker.*;
+import javax.swing.*;
+import java.io.*;
+
+/**
+ * This class implements a program that manages a set of workers.
+ *
+ * @author J. Miller, J. A. Holey and Andrew Nerud and Grant Peroutka
+ * @version TODAY'S DATE
+ */
+public class HourlyEmployeeManager{
+  
+  private HourlyEmployee hEmployee;
+
+  public HourlyEmployeeManager(HourlyEmployee he){
+    hEmployee = he;
+  }
+
+  public void viewMonthlyPay(){
+    System.out.println("The monthly pay was: " + hEmployee.getMonthlyPay());
+   }
+   
+  public void addHours(int numHours){
+    hEmployee.addHours(numHours);
+  }
+  
+  public void resetHours(){
+    hEmployee.resetHours();
+  }
+    
+  public void viewHours(){
+    System.out.println("The number of hours is: " + hEmployee.getHours());
+  }
+  
+  public void setHourlyPayRate(double rate){
+    hEmployee.setHourlyRate(rate);
+  }
+  
+  public void viewHourlyPayRate(){
+    System.out.println("The hourly rate is: " + hEmployee.getHourlyRate());
+  }
+  
+  public void runManager() {
+    char cmd;
+    do
+    {
+      menu ();
+      cmd = acceptCommand ();
+      doCommand (cmd);
+    }
+    while ((cmd != 'q') && (cmd != 'Q'));
+  }
+  
+  private void menu() {
+    System.out.println();
+    System.out.println("\tA Add hours for Hourly Employee ");
+    System.out.println("\tV View monthly pay for Hourly Employee ");
+    System.out.println("\tR Reset hours for Hourly Employee ");
+    System.out.println("\tC View current hours for Hourly Employee");
+    System.out.println("\tS Set hourly pay rate for Hourly Employee ");
+    System.out.println("\tH View hourly pay rate for Hourly Employee ");
+    System.out.println("\tQ Quit the program");
+    System.out.println();
+  }
+  
+  private char acceptCommand() {
+    char cmd;
+    String s = JOptionPane.showInputDialog("Enter command: ");
+    cmd = s.charAt(0);
+    return cmd;
+  }
+  
+  private void doCommand(char cmd) {
+    switch (cmd)
+    {
+      case 'a': case 'A':
+        int hours = Integer.parseInt(JOptionPane.showInputDialog("Hours to add: "));
+        addHours(hours);
+        break;
+      case 'v': case 'V':
+        viewMonthlyPay();
+        break;
+      case 'r': case 'R':
+        resetHours();
+        break;
+      case 'c': case 'C':
+        viewHours();
+        break;
+      case 's': case 'S':
+        double rate = Double.parseDouble(JOptionPane.showInputDialog("Set hourly pay rate: "));
+        setHourlyPayRate(rate);
+        break;
+      case 'h': case 'H':
+        viewHourlyPayRate();
+        break;
+      case 'q': case 'Q':
+        quit ();
+        break;
+      default:
+        System.out.println("Invalid command--try again");
+    }
+  }
+   /** quit
+    * Method to terminate the WorkerManager program
+    */
+  private void quit() {        
+    System.out.println("Now exiting the volunteer manager\n");
+  }
+  
+}

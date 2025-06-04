@@ -1,0 +1,64 @@
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import javax.imageio.ImageIO;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
+public class GameWindow extends JFrame implements ActionListener {
+  
+  public boolean startBtnClicked = false;
+  
+  public GameWindow(){
+    super("Cops N' Robbers");
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(1000,1000);
+    setResizable(false);
+    setVisible(true);
+    
+    startupMenu();
+  }
+  
+  public void startupMenu() {
+    //Have a title with a few buttons -> maybe start new game & load from last saved game
+    //Button clicks will have a property to call gameScreen method
+    
+    JButton startButton = new JButton("Button");
+    startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+    //startButton.setMaximumSize(new Dimension(160, 160));
+    //startButton.setPreferredSize(new Dimension(50, 50));
+    
+    add(startButton);
+    
+    startButton.setActionCommand("w");
+    startButton.addActionListener((ActionListener) this);
+    
+//    if (startBtnClicked == true) {
+//      //how to disable a button
+//      startButton.setEnabled(false);
+//    }
+//    
+//    JSeparator separator = new JSeparator();
+//    add(separator);
+  }
+  
+  public void gameScreen(){
+    JPanel jp = new JPanel();
+    jp.add(new JLabel(new ImageIcon("MNMap.jpg")));
+    this.add(jp);
+    //add in other functionality with 
+  }
+  
+  public void actionPerformed(ActionEvent event) 
+  {
+    String newEvent = event.getActionCommand();
+    
+    if (newEvent.equals("w"))
+    {
+      gameScreen();
+      System.out.println("Clicked start button");
+      startBtnClicked = true;
+    }
+  }
+}

@@ -1,0 +1,286 @@
+import zhstructures.*;
+import ajnstructures.*;
+import org.junit.*;
+import java.util.*;
+import java.lang.reflect.*;
+import java.lang.annotation.*;
+import java.lang.invoke.*;;
+
+/**
+ * A JUnit test case class for class AJNLinkedStack  
+ * 
+ * @author Imad M Rahal
+ * @version September 27, 2022
+ */
+public class AJNLinkedStackTest extends TestClassStats{
+  
+  private ZHStack<Integer> notEmptyStack, emptyStack;
+  
+  @Before
+  public void init(){
+    notEmptyStack = new AJNLinkedStack<Integer>();
+    emptyStack = new AJNLinkedStack<Integer>();
+    notEmptyStack.push(0);
+    notEmptyStack.push(1);
+    notEmptyStack.push(2);
+    notEmptyStack.push(3);
+    notEmptyStack.push(2);    
+  }
+  
+  @Test
+  public void testPeek(){
+    Assert.assertTrue("notEmptyStack's peek is 2",notEmptyStack.peek()==2);
+    passed = true;
+  }
+  
+  @Test
+  public void testPeekFailsWhenStackIsEmpty(){
+    try{
+      emptyStack.peek();
+      passed = false;
+    }
+    catch (NoSuchElementException e){
+      passed = true;
+    }
+  }
+  
+  @Test
+  public void testPush(){
+    Assert.assertTrue("notEmptyStack's peek is 2",notEmptyStack.peek()==2);
+    notEmptyStack.push(5);
+    Assert.assertTrue("notEmptyStack's peek is 5",notEmptyStack.peek()==5);
+    emptyStack.push(1);
+    Assert.assertTrue("emptyStack's peek is 1",emptyStack.peek()==1);    
+    emptyStack.push(2);
+    Assert.assertTrue("emptyStack's peek is 2",emptyStack.peek()==2);    
+    passed = true;    
+  }
+  
+  @Test
+  public void testPop(){
+    Assert.assertTrue("notEmptyStack's peek is 2",notEmptyStack.peek()==2);
+    Assert.assertTrue("popping notEmptyStack will return 2",notEmptyStack.pop()==2);
+    Assert.assertTrue("notEmptyStack's peek is 3",notEmptyStack.peek()==3);    
+    Assert.assertTrue("popping notEmptyStack will return 3",notEmptyStack.pop()==3);
+    Assert.assertTrue("notEmptyStack's peek is 2",notEmptyStack.peek()==2);    
+    Assert.assertTrue("popping notEmptyStack will return 2",notEmptyStack.pop()==2);
+    Assert.assertTrue("notEmptyStack's peek is 1",notEmptyStack.peek()==1);    
+    Assert.assertTrue("popping notEmptyStack will return 1",notEmptyStack.pop()==1);   
+    Assert.assertTrue("notEmptyStack's peek is 0",notEmptyStack.peek()==0);
+    Assert.assertTrue("popping notEmptyStack will return 0",notEmptyStack.pop()==0);     
+    passed = true;    
+  }
+  
+  @Test
+  public void testPopFailsWhenStackIsEmpty(){
+    try{
+      emptyStack.pop();
+      passed = false;
+    }
+    catch (NoSuchElementException e){
+      passed = true;
+    }
+  }
+  
+  @Test
+  public void testIsEmpty(){
+    Assert.assertFalse("notEmptyStack is not empty ",notEmptyStack.isEmpty());
+    Assert.assertTrue("emptyStack is empty ",emptyStack.isEmpty());
+    passed = true;
+  }
+  
+  @Test
+  public void testIterator(){
+    int i = 0;
+    for (Integer element : notEmptyStack) {
+      Assert.assertTrue("notEmptyStack contains element " + element, notEmptyStack.contains(element));
+      i++;
+    }
+    Assert.assertTrue("notEmptyStack contains the same number of elements in iterator ",notEmptyStack.size()==i);
+    passed = true;    
+  }
+  
+  @Test
+  public void testSize(){
+    Assert.assertTrue("notEmptyStack contains 5 elements ",notEmptyStack.size()==5);
+    Assert.assertTrue("emptyStack contains 0 elements ",emptyStack.size()==0);
+    notEmptyStack.pop();
+    Assert.assertTrue("notEmptyStack contains 4 elements ",notEmptyStack.size()==4);
+    notEmptyStack.pop();
+    Assert.assertTrue("notEmptyStack contains 3 elements ",notEmptyStack.size()==3);
+    notEmptyStack.pop();
+    Assert.assertTrue("notEmptyStack contains 2 element  ",notEmptyStack.size()==2);
+    notEmptyStack.pop();
+    Assert.assertTrue("notEmptyStack contains 1 elements ",notEmptyStack.size()==1);
+    notEmptyStack.push(5);
+    Assert.assertTrue("notEmptyStack contains 2 element  ",notEmptyStack.size()==2);    
+    notEmptyStack.pop();;
+    Assert.assertTrue("notEmptyStack contains 1 element  ",notEmptyStack.size()==1);        
+    notEmptyStack.pop();
+    Assert.assertTrue("notEmptyStack contains 0 element  ",notEmptyStack.size()==0);      
+    passed = true;    
+  }
+  
+  
+  @Test
+  public void testOuterClassStructure() throws SecurityException, NoSuchMethodException{
+    Class fas = notEmptyStack.getClass();
+    Class fs = fas.getInterfaces()[0];  
+    
+    Assert.assertTrue(fas.getSimpleName() + " is a class that implements zhstructures.ZHStack " ,  
+                      !fas.isInterface() &&
+                      !Modifier.isAbstract(fas.getModifiers()));
+    
+    Assert.assertTrue(fs.getSimpleName() + " should reside inside package zhstructures ",
+                      fs.getPackage().getName().equals("zhstructures"));    
+    
+    Map<String,String>  allFields = new HashMap<String,String>(){
+      {
+        put("size", "int");
+        put("top", "StackNode");
+      }
+    };
+    testFields(fas,allFields);  
+    
+    Map<String,String>  allMethods = new HashMap<String,String>() {
+      {
+        put("peek", "Object");
+        put("pop", "Object");
+        put("push","void");
+        put("contains","boolean");
+        put("isEmpty","boolean");
+        put("size","int");
+        put("iterator","Iterator");
+      }      
+    }; 
+    testMethods(fas,allMethods); 
+    
+    Constructor[] constructors  = fas.getDeclaredConstructors();
+    Assert.assertEquals(fas.getName() + " should have at least 1 constructor", 1, constructors.length);
+    
+    for (Constructor con: constructors){
+      String paramList = "";
+      for(Class cl: con.getParameterTypes()){
+        paramList += cl.getSimpleName();
+      }
+      Assert.assertTrue(fas.getName() + " should contain constructor: public " + con.getName() + " with " + con.getParameterCount() + " paramaters " , paramList.equals(""));  
+    }
+    passed = true;    
+  }
+  
+  @Test  
+  public void testInnerClassStructure()  throws SecurityException, NoSuchMethodException{
+    Class fas = notEmptyStack.getClass();
+    Class inner = fas.getDeclaredClasses()[0];
+    Class innerSuper = inner.getSuperclass(); 
+    
+    Assert.assertTrue(inner.getSimpleName() + " is a protected inner class that extends ZHOneWayListNode<ElementType, StackNode> " ,  
+                      !inner.isInterface() &&
+                      Modifier.isProtected(inner.getModifiers()) &&
+                      innerSuper.getSimpleName().equals("ZHOneWayListNode"));
+    
+    Field[] fields = inner.getDeclaredFields();
+    int numberOfFields = 0;
+    for(Field f : fields){
+      if (!f.isSynthetic()){
+        numberOfFields++;
+      }  
+    }
+    Assert.assertEquals(inner.getName() + " should contain NO declated fields", 0 ,  numberOfFields);
+    
+    Method[] methods = inner.getDeclaredMethods();
+    Assert.assertEquals(inner.getName() + " should contain NO declated methods", 0 ,  methods.length);
+    
+    Constructor[] constructors  = inner.getDeclaredConstructors();
+    Map<Integer, String> allConstructors = new HashMap<Integer, String>() {
+      {
+        put(0, "");
+        put(2, "ObjectStackNode");
+      }      
+    };   
+    int numberOfConstructors = 0;
+    int numberOfParams = 0;
+    String paramList = "";  
+    
+    for (Constructor con: constructors){
+      if(!con.isSynthetic()){
+        for(Class p: con.getParameterTypes()){
+          if (!p.getSimpleName().equals(fas.getSimpleName())){ //for inner classes , the formal parameter types include the explicit enclosing instance as the first parameter.
+            numberOfParams++;
+            paramList += p.getSimpleName();
+          }
+        }
+        Assert.assertEquals(inner.getName() + " should contain constructor: public StackNode with " + numberOfParams + " paramater(s)" , 
+                            allConstructors.get(numberOfParams), paramList);
+        paramList = "";
+        numberOfParams=0;
+      }
+    }
+    Assert.assertEquals(inner.getName() + " should have at least 2 constructors", 2, constructors.length);    
+    passed = true;    
+  } 
+  
+  
+  //Helper method to check if a given class contains the expected fields 
+  private void testFields(Class c, Map<String,String> allFields) 
+    throws SecurityException{          
+    Field[] fields = c.getDeclaredFields();
+    Assert.assertEquals(c.getName() + " should have " + allFields.size() + " declared fields", 
+                        allFields.size(), fields.length);    
+    boolean found = false;
+    int numberOfFields = 0;
+    for (String f1: allFields.keySet()){
+      //System.out.println(f+ "\n");
+      for (Field f2: fields){
+        if (f1.equals(f2.getName()) && f2.getType().getSimpleName().equals(allFields.get(f1)) & Modifier.isPrivate(f2.getModifiers())){ 
+          found = true;
+        }
+        if (!f2.isSynthetic()){
+          numberOfFields++;
+        }        
+      }
+      if(!found){
+        Assert.fail(c.getName() + " should contain field: " + allFields.get(f1) + " " + f1);
+      }
+      found = false;
+    }      
+    Assert.assertEquals(c.getName() + " should have " + allFields.size() + " declared fields", 
+                        allFields.size(), fields.length);    
+    passed = true;    
+  }
+  
+  
+  //Helper method to check if a given class contains the expected methods 
+  private void testMethods(Class c, Map<String,String> allMethods) 
+    throws SecurityException{          
+    Method[] methods = c.getDeclaredMethods();
+    boolean found = false;
+    int numberOfMethods = 0;   
+    for (String m1: allMethods.keySet()){
+      //System.out.println(f+ "\n");
+      numberOfMethods = 0;
+      for (Method m2: methods){
+        if (m1.equals(m2.getName()) && m2.getReturnType().getSimpleName().equals(allMethods.get(m1))){
+          found = true;
+        }
+        if (!m2.isSynthetic()){
+          numberOfMethods++;
+        }
+      }
+      if(!found){
+        Assert.fail(c.getName() + " should contain method: " + allMethods.get(m1) +" " + m1);
+      }
+      found = false;
+    }     
+    
+    Assert.assertEquals(c.getName() + " should have " + allMethods.size() + " declared methods", 
+                        allMethods.size(), numberOfMethods);
+    
+  }
+  
+  @AfterClass
+  public static void reportStats(){    
+    Class me = MethodHandles.lookup().lookupClass();
+    System.out.println(tallyStats(me));
+  }    
+}

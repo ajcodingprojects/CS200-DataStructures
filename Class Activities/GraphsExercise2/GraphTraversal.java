@@ -1,0 +1,98 @@
+import java.util.*;
+import mydatastructures.*;
+
+public class GraphTraversal{
+  
+  public static String breadthFirstSearch(Graph graph, int start) {
+    //1-Use a queue initialized to start ... note that Java's LinkedList implements Queue Interface
+    Queue<Integer> theQ = new LinkedList<Integer> ();
+    // Array to store the visit status for each vertex; a true indicates that 
+    // a vertex has been added to queue or visited before
+    boolean[] seen = new boolean[graph.getNumV()];
+    // append visited vertices to this String
+    String visitSequence = "";
+    theQ.offer(start);
+    //2-Mark start as seen
+    seen[start] = true;
+    
+    //COMPLETE ME **************************************************************************************************
+    //3- Repeat following as long as queue is not empty
+    //  3.1- Dequeue and visit (by appending vertex to visitSequence
+    //  3.2- Enqueue adjacent vertices (not seen before) marking each as seen
+    while(!theQ.isEmpty()){
+      int current = theQ.remove();
+      Iterator<Edge> neighbors = graph.getEdgeIterator(current);
+      if (neighbors != null) {
+        while (neighbors.hasNext()) {
+          Edge next = neighbors.next();
+          if (!seen[next.getDest()]) {
+            seen[next.getDest()] = true;
+            theQ.offer(next.getDest());
+          }
+        }
+      }
+      visitSequence += current + " ";
+    }
+    
+    return visitSequence;
+  }
+  
+  //public version
+  public static String depthFirstSearch(Graph graph, int start){
+    boolean[] visited = new boolean[graph.getNumV()];
+    visited[start] = true;
+    return depthFirstSearch(graph, start,visited);
+  }
+  
+  //Recursive private version
+  private static String depthFirstSearch(Graph graph, int current,  boolean[] visited ) {
+    String visitSequence= "";
+    //COMPLETE ME **************************************************************************************************
+    // 1-Visit current vertex: mark it as visited and append it to visitSequence
+    // 2-For every neighbor not visited before, make a recursive call appending returned value to visitSequence
+    visitSequence += current + " ";
+    Iterator<Edge> neighbors = graph.getEdgeIterator(current);
+    if (neighbors != null) {
+      while (neighbors.hasNext()) {
+        Edge next = neighbors.next();
+        if (!visited[next.getDest()]) {
+          visited[next.getDest()] = true;
+          visitSequence += depthFirstSearch(graph, next.getDest(), visited);
+        }
+      }
+    }
+    
+    return visitSequence;
+  }
+  
+  public static void displayGraphInfo(Graph g){
+    System.out.println("Graph g has " + g.getNumV() + " vertices");
+    System.out.println(); 
+    System.out.println("Is graph directed?  " + g.isDirected());
+    System.out.println();
+    System.out.println("Show all edges:");
+    for(int v = 0; v<g.getNumV();v++){
+      Iterator<Edge> edges = g.getEdgeIterator(v);
+      if (edges!=null){
+        while(edges.hasNext())
+          System.out.println(edges.next());
+      }
+    }
+    System.out.println();
+    System.out.println("BFS traversal starting from 0 : " + GraphTraversal.breadthFirstSearch(g,0));
+    System.out.println("BFS traversal starting from 5 : " + GraphTraversal.breadthFirstSearch(g,5));
+    System.out.println();
+    System.out.println("DFS traversal starting from 0 : " +  GraphTraversal.depthFirstSearch(g,0));
+    System.out.println("DFS traversal starting from 5 : " +  GraphTraversal.depthFirstSearch(g,5));
+  }
+  
+  public static void main(String[] args){
+    System.out.println("*********************************** Weighted, Undirected ");
+    Graph g = new MapGraph("datafile2",false);
+    GraphTraversal.displayGraphInfo(g); 
+    System.out.println("\n");
+    System.out.println("*********************************** Weighted, Directed ");    
+    g = new MapGraph("datafile2",true);
+    GraphTraversal.displayGraphInfo(g);       
+  } 
+}

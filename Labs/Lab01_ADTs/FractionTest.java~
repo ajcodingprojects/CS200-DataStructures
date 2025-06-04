@@ -1,0 +1,91 @@
+import org.junit.*;
+
+// add another import to give the test class access to the fraction package
+
+
+/**
+ * A JUnit test case class for the IntFraction class.
+ * 
+ */
+public class FractionTest {
+  
+  private Fraction frac1, frac2, frac3, frac4;
+  
+  @Before
+  public void init() {
+    //frac1 and frac2 are created using constructor 3
+    frac1 = new IntFraction(5,7);
+    frac2 = new IntFraction(1,2);
+    //frac3 is created using constructor 1
+    frac3 = new IntFraction();
+    //frac4 is created using constructor 2
+    frac4 = new IntFraction(5);
+  }
+  
+  
+  //1. Test method(s) for default constructor: test instance variable frac3 has the correct numerator  
+  //    and denominator 
+  @Test
+  public void testDefaultConstructor(){
+  }
+  
+  
+  //2. Test method(s) for second constructor: test instance variable frac4 has the correct numerator 
+  //    and denominator 
+  @Test
+  public void testSecondConstructor(){
+
+  }
+  
+  
+  //3. Test method(s) for third constructor: 
+  //3(a). test instance variables frac1 and frac2 have the correct numerator and denominator 
+  @Test
+  public void testThirdConstructor(){
+  }  
+  
+  //3(b). test contructor 3 fails to create a new fraction object if given a zero denominator
+  @Test(expected = IllegalArgumentException.class)
+  public void testThirdConstructorFailsForZeroDenominator(){
+  }
+  
+  
+  //4. Test method(s) for addToThis: Complete method below to test method addToThis returns a 
+  //    correct fraction result after adding operand fractions frac1 and frac2 AND that the  
+  //    operand fractions (frac1 and frac2) do not change as a result of this operation
+  @Test
+  public void testAddToThis(){
+    Fraction test = (IntFraction) frac1.addToThis(frac2);
+  }
+  
+  /**
+   * Add the following test methods (create a separate, clearly-named test method for each case). 
+   *    You may create additional Fraction objects as local variables in your test methods if need be
+   *    (such as Fraction test in testAddToThis() above)
+   * 
+   * 
+   * 5. test  method subtractFromThis returns a correct fraction result and that 
+   * operand fractions do not change as a result of this operation
+   * 
+   * 
+   * 6. test method multiplyThisBy returns a correct fraction result and that 
+   * operand fractions do not change as a result of this operation
+   * 
+   * 
+   * 7(a). test method divideThisBy returns a correct fraction result and that 
+   * operand fractions do not change as a result of this operation
+   * 
+   * 7(b). test method divideThisBy fails if provided a zero fraction as a parameter 
+   *
+   * 
+   * 8(a). test two fractions with the same numerators and denominators are equal 
+   * 
+   * 8(b). test two fractions may be unequal
+   * 
+   * 8(c). test  two fractions may still be equal even with the different numerators and denominators 
+   *     - e.g. 1: 5/7 and 10/14 
+   *     - e.g. 2: 1/2 and -5/-10
+   * 
+   */
+
+}

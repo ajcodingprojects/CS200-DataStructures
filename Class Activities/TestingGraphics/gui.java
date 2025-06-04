@@ -1,0 +1,45 @@
+import javax.swing.*;
+import java.awt.*;
+import java.io.*;
+import javax.imageio.ImageIO;
+
+
+class gui extends JFrame {
+  
+  public gui(){
+    super("My First GUI");
+    //Graphics g = frame.getGraphics();
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setSize(1000,1000);
+    setVisible(true);
+    
+    JPanel jp = new JPanel();
+    jp.add(new JLabel(new ImageIcon("CSBVert.jpg")));
+    this.add(jp);
+  }
+  
+  public static void main(String args[]){
+//    JFrame frame = new JFrame("My First GUI");
+//    Graphics g = frame.getGraphics();
+//    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//    frame.setSize(1000,1000);
+//    JButton button1 = new JButton("Button 1");
+//    JButton button2 = new JButton("Button 2");
+//    frame.getContentPane().add(button1);
+//    frame.getContentPane().add(button2);
+//    frame.setVisible(true);
+    gui gi = new gui();
+    //gi.drawImage(gi.getGraphics());
+    
+  }
+  
+  public void drawImage(Graphics g) {
+    ImageIcon im = new ImageIcon("CSBVert.jpg");
+    Image i = im.getImage();
+    try {
+    i = ImageIO.read(new File("CSBVert.jpg"));
+    }catch (Exception e){}
+    g.drawImage(i, 0, 0, this);
+    super.paint(g);
+  }
+}

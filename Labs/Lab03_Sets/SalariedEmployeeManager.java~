@@ -1,0 +1,79 @@
+import java.util.*;
+import java.util.stream.*;
+import worker.*;
+import javax.swing.*;
+import java.io.*;
+
+/**
+ * This class implements a program that manages a set of workers.
+ *
+ * @author J. Miller, J. A. Holey and Andrew Nerud and Grant Peroutka
+ * @version TODAY'S DATE
+ */
+public class SalariedEmployeeManager{
+  
+  private SalariedEmployee sEmployee;
+
+  public SalariedEmployeeManager(SalariedEmployee se){
+    sEmployee = se;
+  }
+  
+  public void setMonthlyPay(double salary){
+    sEmployee.setMonthlyPay(salary);
+  }
+  
+   public void viewMonthlyPay(){
+    System.out.println("The monthly pay was: " + sEmployee.getMonthlyPay());
+   }
+   
+   public void runManager() {
+    char cmd;
+    do
+    {
+      menu ();
+      cmd = acceptCommand ();
+      doCommand (cmd);
+    }
+    while ((cmd != 'q') && (cmd != 'Q'));
+  }
+  
+  private void menu() {
+    System.out.println();
+    System.out.println("\tS Set salaried employee's pay ");
+    System.out.println("\tV View salaried employee's pay ");
+    System.out.println("\tQ Quit the program");
+    System.out.println();
+  }
+  
+  private char acceptCommand() {
+    char cmd;
+    String s = JOptionPane.showInputDialog("Enter command: ");
+    cmd = s.charAt(0);
+    return cmd;
+  }
+  
+  private void doCommand(char cmd) {
+    switch (cmd)
+    {
+      case 's': case 'S':
+        double salary = Double.parseDouble(JOptionPane.showInputDialog("Monthly salary: "));
+        setMonthlyPay(salary);
+        break;
+      case 'v': case 'V':
+        viewMonthlyPay();
+        break;
+      case 'q': case 'Q':
+        quit ();
+        break;
+      default:
+        System.out.println("Invalid command--try again");
+    }
+  }
+   /** quit
+    * Method to terminate the WorkerManager program
+    */
+  private void quit() {        
+    System.out.println("Now exiting the salaried employee manager\n");
+  }
+  
+}

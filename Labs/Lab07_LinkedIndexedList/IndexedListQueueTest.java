@@ -1,0 +1,246 @@
+import zhstructures.*;
+import ajnstructures.*;
+import org.junit.*;
+import java.util.*;
+import java.lang.reflect.*;
+import java.lang.annotation.*;
+import java.lang.invoke.*;
+
+/**
+ * A JUnit test case class for class AJNIndexedListQueue
+ * 
+ * @author Imad M Rahal
+ * @version October 19, 2022
+ */
+
+public class IndexedListQueueTest extends TestClassStats{
+  
+  private ZHQueue<Integer> notEmptyQueue, emptyQueue;
+  
+  @Before
+  public void init(){
+    notEmptyQueue = new AJNIndexedListQueue<Integer>();
+    emptyQueue = new AJNIndexedListQueue();
+    notEmptyQueue.enqueue(0);
+    notEmptyQueue.enqueue(1);
+    notEmptyQueue.enqueue(2);
+    notEmptyQueue.enqueue(3);
+    notEmptyQueue.enqueue(2);    
+  }
+  
+  @Test
+  public void testPeek(){
+    Assert.assertTrue("notEmptyQueue's peek is 0",notEmptyQueue.peek()==0);
+    passed = true;
+  }
+  
+  @Test //(expected=NoSuchElementException.class)
+  public void testPeekFailsWhenQueueIsEmpty(){
+    try{
+      emptyQueue.peek();
+      passed = false;
+      Assert.fail("testPeekFailsWhenQueueIsEmpty should have failed");      
+      
+    }
+    catch (NoSuchElementException e){
+      passed = true;
+    }
+  }
+  
+  @Test
+  public void testEnqueue(){
+    Assert.assertTrue("notEmptyQueue's peek is 0",notEmptyQueue.peek()==0);
+    notEmptyQueue.enqueue(5);
+    Assert.assertTrue("notEmptyQueue's peek is 0",notEmptyQueue.peek()==0);       
+    emptyQueue.enqueue(1);
+    Assert.assertTrue("emptyQueue's peek is 1",emptyQueue.peek()==1);    
+    emptyQueue.enqueue(2);
+    Assert.assertTrue("emptyQueue's peek is still 1",emptyQueue.peek()==1);    
+    passed = true;
+  }
+  
+  @Test
+  public void testDequeue(){
+    Assert.assertTrue("notEmptyQueue's peek is 2",notEmptyQueue.peek()==0);
+    Assert.assertTrue("dequeuing from notEmptyQueue will return 0",notEmptyQueue.dequeue()==0);
+    Assert.assertTrue("notEmptyQueue's peek is 1",notEmptyQueue.peek()==1);    
+    Assert.assertTrue("dequeuing from  notEmptyQueue will return 1",notEmptyQueue.dequeue()==1);
+    Assert.assertTrue("notEmptyQueue's peek is 2",notEmptyQueue.peek()==2);    
+    Assert.assertTrue("dequeuing from  notEmptyQueue will return 2",notEmptyQueue.dequeue()==2);
+    Assert.assertTrue("notEmptyQueue's peek is 3",notEmptyQueue.peek()==3);    
+    Assert.assertTrue("dequeuing from  notEmptyQueue will return 3",notEmptyQueue.dequeue()==3);   
+    Assert.assertTrue("notEmptyQueue's peek is 2",notEmptyQueue.peek()==2);    
+    Assert.assertTrue("dequeuing from  notEmptyQueue will return 2",notEmptyQueue.dequeue()==2);  
+    passed = true;
+  }
+  
+  @Test//(expected=NoSuchElementException.class)
+  public void testDequeueFailsWhenQueueIsEmpty(){
+    try{
+      emptyQueue.dequeue();
+      passed = false;
+      Assert.fail("testDequeueFailsWhenQueueIsEmpty should have failed");         
+    }
+    catch (NoSuchElementException e){
+      passed = true;
+    }
+  }
+  
+  @Test
+  public void testIsEmpty(){
+    Assert.assertFalse("notEmptyQueue is not empty ",notEmptyQueue.isEmpty());
+    Assert.assertTrue("emptyQueue is empty ",emptyQueue.isEmpty());
+    passed = true;
+  }
+  
+  @Test
+  public void testIterator(){
+    int i = 0;
+    for (Integer element : notEmptyQueue) {
+      Assert.assertTrue("notEmptyQueue contains element " + element, notEmptyQueue.contains(element));
+      i++;
+    }
+    Assert.assertTrue("notEmptyQueue contains the same number of elements in iterator ",notEmptyQueue.size()==i);
+    passed = true;
+  }
+  
+  @Test
+  public void testSize(){
+    Assert.assertTrue("notEmptyQueue contains 5 elements ",notEmptyQueue.size()==5);
+    Assert.assertTrue("emptyQueue contains 0 elements ",emptyQueue.size()==0);
+    notEmptyQueue.dequeue();
+    Assert.assertTrue("notEmptyQueue contains 4 elements ",notEmptyQueue.size()==4);
+    notEmptyQueue.dequeue();
+    Assert.assertTrue("notEmptyQueue contains 3 elements ",notEmptyQueue.size()==3);
+    notEmptyQueue.dequeue();
+    Assert.assertTrue("notEmptyQueue contains 2 element  ",notEmptyQueue.size()==2);
+    notEmptyQueue.dequeue();
+    Assert.assertTrue("notEmptyQueue contains 1 elements ",notEmptyQueue.size()==1);
+    notEmptyQueue.enqueue(5);
+    Assert.assertTrue("notEmptyQueue contains 2 element  ",notEmptyQueue.size()==2);    
+    notEmptyQueue.dequeue();;
+    Assert.assertTrue("notEmptyQueue contains 1 element  ",notEmptyQueue.size()==1);        
+    notEmptyQueue.dequeue();
+    Assert.assertTrue("notEmptyQueue contains 0 element  ",notEmptyQueue.size()==0);   
+    passed = true;
+  }
+  
+  @Test
+  public void testOuterClassStructure() throws SecurityException, NoSuchMethodException{
+    Class fas = notEmptyQueue.getClass();
+    Class fs = fas.getInterfaces()[0];  
+    
+    Assert.assertTrue(fas.getSimpleName() + " is a class that implements zhstructures.ZHQueue " ,  
+                      !fas.isInterface() &&
+                      !Modifier.isAbstract(fas.getModifiers()));
+    
+    Assert.assertTrue(fs.getSimpleName() + " should reside inside package zhstructures ",
+                      fs.getPackage().getName().equals("zhstructures"));    
+    System.out.println(fas.getSimpleName().substring(0,fas.getSimpleName().length()-5));
+    Map<String,String>  allFields = new HashMap<String,String>(){
+      {
+        put("innerList", fas.getSimpleName().substring(0,fas.getSimpleName().length()-5));
+      }
+    };
+    testFields(fas,allFields, true);  
+    
+    Map<String,String>  allMethods = new HashMap<String,String>() {
+      {
+        put("peek", "Object");
+        put("dequeue", "Object");
+        put("enqueue","void");
+        put("contains","boolean");
+        put("isEmpty","boolean");
+        put("size","int");
+        put("iterator","Iterator");
+      }      
+    }; 
+    testMethods(fas,allMethods, false); 
+    
+    Constructor[] constructors  = fas.getDeclaredConstructors();
+    Assert.assertEquals(fas.getName() + " should have at least 1 constructor", 1, constructors.length);
+    
+    for (Constructor con: constructors){
+      String paramList = "";
+      for(Class cl: con.getParameterTypes()){
+        paramList += cl.getSimpleName();
+      }
+      Assert.assertTrue(fas.getName() + " should contain constructor: public " + con.getName() + " with " + con.getParameterCount() + " paramaters " , paramList.equals(""));  
+    }
+    passed = true;
+  }
+  
+  //Helper method to check if a given class contains the expected fields 
+  private void testFields(Class c, Map<String,String> allFields, boolean isPrivate) 
+    throws SecurityException{          
+    Field[] fields = c.getDeclaredFields();
+  
+    boolean found = false;
+    int numberOfFields = 0;
+    for (String f1: allFields.keySet()){
+      //System.out.println(f1 + " : " + allFields.get(f1));
+      for (Field f2: fields){
+        //System.out.println("   vs " + Modifier.isPrivate(f2.getModifiers()) + " " + f2.getName() + " : " + f2.getType().getSimpleName());
+        if (f1.equals(f2.getName()) && f2.getType().getSimpleName().equals(allFields.get(f1))){ 
+          found = true;
+          if (isPrivate && !Modifier.isPrivate(f2.getModifiers())){
+            found = false;
+          }
+        }
+        if (!f2.isSynthetic()){
+          numberOfFields++;
+        }
+      }
+      //System.out.println("   ==>  " + found );
+      if(!found){
+        Assert.fail(c.getName() + " should contain field: " + allFields.get(f1) + " " + f1);
+      }
+      found = false;
+    }      
+    Assert.assertEquals(c.getName() + " should contain the following " + allFields.size() + " declared fields : "  + allFields , 
+                        allFields.size(), fields.length);    
+  }
+  
+
+  //Helper method to check if a given class contains the expected methods 
+  private void testMethods(Class c, Map<String,String> allMethods, boolean isPrivate) 
+    throws SecurityException{          
+    Method[] methods = c.getDeclaredMethods();
+    boolean found = false;
+    int numberOfMethods = 0;   
+    for (String m1: allMethods.keySet()){
+      //System.out.println(m1);
+      numberOfMethods = 0;
+      for (Method m2: methods){
+        //System.out.println("   vs " + Modifier.isPrivate(m2.getModifiers()) + " " + m2.getName() + " : " + m2.getReturnType().getSimpleName());        
+        if (m1.equals(m2.getName()) && m2.getReturnType().getSimpleName().equals(allMethods.get(m1))){
+          found = true;
+          if (isPrivate && !Modifier.isPrivate(m2.getModifiers())){
+            found = false;
+          }
+        }
+        if (!m2.isSynthetic()){
+          numberOfMethods++;
+        }        
+      }
+      //System.out.println("   ==>  " + found );
+      if(!found){
+        Assert.fail(c.getName() + " should contain method: " + allMethods.get(m1) +" " + m1);
+      }
+      found = false;
+    }     
+    Assert.assertEquals(c.getName() + " should contain the following " + allMethods.size() + " declared methods : "  + allMethods , 
+                        allMethods.size(), numberOfMethods);  
+  }
+  
+  @AfterClass
+  public static void reportStats(){    
+    Class me = MethodHandles.lookup().lookupClass();
+    System.out.println(tallyStats(me));
+  }
+  
+}
+
+
+
+

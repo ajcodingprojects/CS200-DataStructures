@@ -1,0 +1,37 @@
+package worker;
+
+import java.io.*;
+
+/** 
+ * This class extends HourlyWorker as a Volunteer
+ * 
+ * @author Andrew Nerud, Grant Peroutka
+ * @verion 2022
+ */
+
+public class Volunteer extends HourlyWorker {
+ 
+ /**
+   * First constructor for the Volunteer
+   *   Instantiates name and hour fields
+   * 
+   * @param name a String name of a Volunteer
+   */
+  public Volunteer(String name) {
+    super(name);
+    
+  }
+  
+  /**
+   * Second constructor for the Volunteer
+   *   Instantiates name and hour fields
+   * 
+   * @param name a String name of a Volunteer
+   * @param hours a int number of hours worked
+   * @throws IllegalArgumentException if the value of hours is negative
+   */
+  public Volunteer(String name, int hours) {
+    super(name,hours);
+  }
+  
+}

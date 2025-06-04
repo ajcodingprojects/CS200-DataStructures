@@ -1,0 +1,277 @@
+import zhstructures.*;
+import org.junit.*;
+import java.util.*;
+import <foo>structures.*;
+import java.lang.reflect.*;
+import java.lang.annotation.*;
+import java.lang.invoke.*;
+/**
+ * A JUnit test case class for class <FOO>TreeMap  
+ * 
+ * @author Imad M Rahal
+ * @version November 11, 2022
+ */
+public class TreeMapTest extends TestClassStats{
+  
+  private ZHMap<String,Integer> notEmptyMap, emptyMap;
+  
+  @Before  
+  public void init(){
+    emptyMap = new <FOO>TreeMap<String,Integer>();    
+    notEmptyMap = new <FOO>TreeMap<String,Integer>();
+    notEmptyMap.put("a",10);  
+    notEmptyMap.put("b",20);
+    notEmptyMap.put("c",30);
+    notEmptyMap.put("d",40);  
+  }
+  
+  @Test  
+  public void testPutToAddANewPairInAnEmptyMap(){    
+    Assert.assertNull("emptyMaptyMap adds an (e,50) entry ",emptyMap.put("e",50));
+    passed = true;
+  }
+  
+  @Test  
+  public void testPutToAddANewPairInANotEmptyMap(){    
+    Assert.assertNull("notEmptyMap adds an (e,50) entry ",notEmptyMap.put("e",50));
+    passed = true;
+  }
+  
+  @Test  
+  public void testPutToUpdateAnExistingPair(){
+    Assert.assertTrue("notEmptyMap has the value 20 for key b ", notEmptyMap.get("b")==20);
+    Assert.assertTrue("notEmptyMap replaces (b,20) with (b,200) ", notEmptyMap.put("b",200)==20);
+    Assert.assertTrue("notEmptyMap has the value 200 for key b ", notEmptyMap.get("b")==200);    
+    passed = true;
+  }
+  
+  @Test  
+  public void testContainsReturnsTrue(){
+    Assert.assertTrue("notEmptyMap contains entry (a,10) ", notEmptyMap.contains("a"));
+    Assert.assertTrue("notEmptyMap contains entry (b,20) ", notEmptyMap.contains("b"));
+    Assert.assertTrue("notEmptyMap contains entry (c,30) ", notEmptyMap.contains("c"));
+    Assert.assertTrue("notEmptyMap contains entry (d,40) ", notEmptyMap.contains("d"));    
+    passed = true;
+  }
+  
+  @Test  
+  public void testContainsReturnsFalse(){  
+    Assert.assertFalse("notEmptyMap does not contain entry (e,50) ", notEmptyMap.contains("e"));     
+    Assert.assertFalse("emptyMap does not contain entry (e,50) ", emptyMap.contains("e"));     
+    passed = true;
+  }
+  
+  @Test   
+  public void testGet(){
+    Assert.assertTrue("notEmptyMap contains entry (a,10) ", notEmptyMap.get("a")==10);
+    Assert.assertTrue("notEmptyMap contains entry (b,20) ", notEmptyMap.get("b")==20);
+    Assert.assertTrue("notEmptyMap contains entry (c,30) ", notEmptyMap.get("c")==30);
+    Assert.assertTrue("notEmptyMap contains entry (d,40) ", notEmptyMap.get("d")==40);
+    passed = true;
+  }
+  
+  @Test   
+  public void testGetReturnsNull(){
+    Assert.assertNull("notEmptyMap does not contain entry (e,50) ", notEmptyMap.get("e")); 
+    Assert.assertNull("emptyMap does not contain entry (e,50) ", emptyMap.get("e"));
+    passed = true;
+  }
+  
+  @Test   
+  public void testIsEmptyReturnsTrue(){
+    Assert.assertTrue("emptyMaptyMap is empty ",emptyMap.isEmpty());
+    passed = true; 
+  }
+  
+  @Test   
+  public void testIsEmptyReturnsFalse(){
+    Assert.assertFalse("notEmptyMap is not empty ",notEmptyMap.isEmpty());
+    passed = true;
+  }  
+  
+  @Test  
+  public void testIterator(){
+    int i = 0;
+    for (String key: notEmptyMap) {
+      Assert.assertTrue("notEmptyMap contains key " + key, notEmptyMap.contains(key));
+      if (key.equals("a"))
+        Assert.assertTrue("key=" + key + " ==> value=" + notEmptyMap.get(key), notEmptyMap.get(key)==10);
+      else if (key.equals("b")) 
+        Assert.assertTrue("key=" + key + " ==> value=" + notEmptyMap.get(key), notEmptyMap.get(key)==20);
+      else if (key.equals("c")) 
+        Assert.assertTrue("key=" + key + " ==> value=" + notEmptyMap.get(key), notEmptyMap.get(key)==30);
+      else if (key.equals("d")) 
+        Assert.assertTrue("key=" + key + " ==> value=" + notEmptyMap.get(key), notEmptyMap.get(key)==40);      
+      i++;
+    }
+    Assert.assertTrue("notEmptyMap contains the same number of elements in iterator ",notEmptyMap.size()==i);
+    passed = true;
+  }
+  
+  @Test  
+  public void testRemove(){
+    Assert.assertTrue("notEmptyMap contains entry (a,10) ",notEmptyMap.remove("a")==10);
+    passed = true; 
+  }
+  
+  @Test  
+  public void testRemoveReturnsNull(){
+    Assert.assertNull("emptyMap does NOT contains entr (a,10) ", emptyMap.remove("a"));
+    passed = true;
+  }  
+  
+  @Test  
+  public void testRemoveReturnsToEmpty(){
+    Assert.assertTrue("notEmptyMap contains entry (a,10) ",notEmptyMap.remove("a")==10);
+    Assert.assertTrue("notEmptyMap contains entry (b,20) ", notEmptyMap.remove("b")==20);
+    Assert.assertTrue("notEmptyMap contains entry (c,30) ",notEmptyMap.remove("c")==30);
+    Assert.assertTrue("notEmptyMap contains entry (d,40) ",notEmptyMap.remove("d")==40);
+    Assert.assertTrue("notEmptyMap is empty ",notEmptyMap.isEmpty());
+    passed = true;
+  }
+  
+  @Test  
+  public void testSize(){
+    Assert.assertTrue("notEmptyMap contains 4 elements ",notEmptyMap.size()==4);
+    Assert.assertTrue("emptyMap contains 0 elements ",emptyMap.size()==0);  
+    passed = true;
+  }
+  
+  @Test
+  public void testOuterClassStructure() throws SecurityException, NoSuchMethodException{
+    Class outer = notEmptyMap.getClass();
+    Class outer_interface = outer.getInterfaces()[0];
+    
+    Assert.assertTrue(outer.getSimpleName() + " is a class that implements ZHMap " ,  
+                      !outer.isInterface() &&
+                      !Modifier.isAbstract(outer.getModifiers()));
+    
+    Assert.assertTrue(outer_interface.getSimpleName() + " should reside inside package zhstructures ",
+                      outer_interface.getPackage().getName().equals("zhstructures"));    
+    
+    Map<String,String>  allFields = new HashMap<String,String>(){
+      {
+        put("innerTree", "ZHBinarySearchTree");
+      }
+    };
+    testFields(outer,allFields, true);  
+    
+    Map<String,String>  allMethods = new HashMap<String,String>() {
+      {
+        put("contains", "boolean");
+        put("get","Object");  
+        put("isEmpty", "boolean");
+        put("iterator","Iterator");        
+        put("put","Object");
+        put("remove","Object"); 
+        put("size","int");                
+      }      
+    }; 
+    testMethods(outer,allMethods, false); 
+    
+    Constructor[] constructors  = outer.getDeclaredConstructors();
+    Assert.assertEquals(outer.getName() + " should have at least 1 constructor", 1, constructors.length);
+    
+    for (Constructor con: constructors){
+      String paramList = "";
+      for(Class cl: con.getParameterTypes()){
+        paramList += cl.getSimpleName();
+      }
+      Assert.assertTrue(outer.getName() + " should contain constructor: public " + con.getName() + " with 0 paramaters " , paramList.equals(""));  
+    }
+    passed = true;    
+  }
+  
+  //Helper method to check if a given class contains the expected fields 
+  private void testFields(Class c, Map<String,String> allFields, boolean isPrivate) 
+    throws SecurityException{          
+    Field[] fields = c.getDeclaredFields();
+    
+    boolean found = false;
+    int numberOfFields = 0;
+    for (String f1: allFields.keySet()){
+      //System.out.println(f1 + " : " + allFields.get(f1));
+      for (Field f2: fields){
+        //System.out.println("   vs " + Modifier.isPrivate(f2.getModifiers()) + " " + f2.getName() + " : " + f2.getType().getSimpleName());
+        if (f1.equals(f2.getName()) && f2.getType().getSimpleName().equals(allFields.get(f1))){ 
+          found = true;
+          if (isPrivate && !Modifier.isPrivate(f2.getModifiers())){
+            found = false;
+          }
+        }
+        if (!f2.isSynthetic()){
+          numberOfFields++;
+        }
+      }
+      //System.out.println("   ==>  " + found );
+      if(!found){
+        if (isPrivate){
+          Assert.fail(c.getName() + " should contain private field: " + allFields.get(f1) + " " + f1);
+        }
+        else{
+          Assert.fail(c.getName() + " should contain field: " + allFields.get(f1) + " " + f1);
+        }
+      }
+      found = false;
+    }      
+    Assert.assertEquals(c.getName() + " should contain the following " + allFields.size() + " declared fields : "  + allFields , 
+                        allFields.size(), fields.length);    
+  }
+  
+//Helper method to check if a given class contains the expected methods 
+  private void testMethods(Class c, Map<String,String> allMethods, boolean isPrivate) 
+    throws SecurityException{          
+    Method[] methods = c.getDeclaredMethods();
+    boolean found = false;
+    int numberOfPrivateMethods = 0; 
+    int numberOfPublicMethods = 0;
+    for (String m1: allMethods.keySet()){
+      //System.out.println(m1);
+      numberOfPrivateMethods = 0;
+      numberOfPublicMethods = 0;
+      for (Method m2: methods){
+        //System.out.println("   vs " + Modifier.isPrivate(m2.getModifiers()) + " " + m2.getName() + " : " + m2.getReturnType().getSimpleName());        
+        if (m1.equals(m2.getName()) && m2.getReturnType().getSimpleName().equals(allMethods.get(m1))){
+          found = true;
+          if (isPrivate && !Modifier.isPrivate(m2.getModifiers())){
+            found = false;
+          }
+        }
+        if (!m2.isSynthetic()){
+          if (Modifier.isPrivate(m2.getModifiers())){
+            numberOfPrivateMethods++;
+          }
+          else{
+            numberOfPublicMethods++;
+          }
+        }        
+      }
+      //System.out.println("   ==>  " + found );
+      if(!found){
+        if (isPrivate){
+          Assert.fail(c.getName() + " should contain private method: " + allMethods.get(m1) +" " + m1);
+        }
+        else{
+          Assert.fail(c.getName() + " should contain method: " + allMethods.get(m1) +" " + m1);
+        }        
+      }
+      found = false;
+    }     
+    if (isPrivate){
+      Assert.assertEquals(c.getName() + " should contain the following " + allMethods.size() + 
+                          " private methods : "  + allMethods, 
+                          (allMethods.size()) , numberOfPrivateMethods);      
+    }
+    else{
+      Assert.assertEquals(c.getName() + " should contain the following " + allMethods.size() + 
+                          " public methods : "  + allMethods, 
+                          (allMethods.size()) , numberOfPublicMethods);      
+    }    
+  }
+  
+  @AfterClass
+  public static void reportStats(){    
+    Class me = MethodHandles.lookup().lookupClass();
+    System.out.println(tallyStats(me));
+  }   
+}

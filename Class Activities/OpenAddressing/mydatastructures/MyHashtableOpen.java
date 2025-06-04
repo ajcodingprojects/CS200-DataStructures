@@ -1,0 +1,250 @@
+package mydatastructures;
+
+import java.util.*;
+
+public class MyHashtableOpen<K,V> implements MyHashMap<K,V> {
+  // Constants
+  private static final int START_CAPACITY = 3;
+  private static final double LOAD_THRESHOLD = .75;
+  
+  // Data Fields
+  private int numKeys;
+
+  //Stores entries as Objects; must cast to Entry  
+  private Object[] table;
+  
+  //To be stored in place of deleted entries
+  private final Entry DELETED = new Entry();
+  
+  // Constructor
+  public MyHashtableOpen() {
+    this.table = new Object[START_CAPACITY];
+  }
+  
+  /** Returns the number of entries in the map */
+  public int size() {
+    return this.numKeys;
+  }
+  
+  /** Returns true if empty */
+  public boolean isEmpty() {
+    return this.numKeys == 0;
+  }
+  
+  /** Returns a set containing all keys in Map*/
+  public Set<K> keySet(){
+    Set<K> keySet = new TreeSet<K>();
+    for (int i = 0; i < this.table.length; i++){
+      Entry entry = (Entry) this.table[i];
+      if(entry!=null && !entry.equals(DELETED)){
+        keySet.add(entry.getKey());
+      }
+    }
+    return keySet;
+  }
+  
+  /** Returns a string containing all entries(key,value) in this map*/
+  public String toString(){
+    String concat="{";
+    for (K k: this.keySet()){
+      concat += ("(" + k + "," + this.get(k) + ") ");
+    }
+    return concat + "}";
+  } 
+  
+  /** 
+   * A helper method which finds either the target key or the first empty 
+   * slot in the search chain using linear probing.
+   * pre: The table is not full.
+   * @param key The key of the target object
+   * @return The position of the target or the first empty slot if the 
+   * target is not in the table.
+   */
+  private int find(K key) {
+    // Calculate the starting index.
+    int index = key.hashCode() % this.table.length;
+    if (index < 0){
+      index += this.table.length; // Make it positive.
+    }
+    // Increment index until an empty spot is reached or the key is found.
+    // ASSUME THAT THERE WILL ALWAYS BE A NULL VALUE
+    Entry entry = (Entry) this.table[index];
+    while ((entry != null) && (!key.equals(entry.getKey()))) {
+      index++;
+      // Check for wraparound.
+      if (index >= this.table.length){
+        index = 0; // Wrap around.
+      }
+      entry = (Entry) this.table[index];
+    }
+    return index;
+  }
+  
+  /** Expands table size when loadFactor exceeds LOAD_THRESHOLD
+    * post: The size of table is doubled and is an odd integer.
+    * Each nondeleted entry from the original table is
+    * reinserted into the expanded table.
+    * The value of numKeys is reset to the number of items
+    * actually inserted;
+    */
+  private void rehash() {
+    // Save a reference to oldTable.
+    Object[] oldTable = this.table;
+    
+    // Double capacity of this table.
+    this.table =  new Object[2 * oldTable.length + 1];
+    
+    // Reinsert all items in oldTable into expanded table.
+    this.numKeys = 0;
+    
+    for (int i = 0; i < oldTable.length; i++) {
+      Entry entry = (Entry) oldTable[i];
+      if ((entry!= null) && !entry.equals(DELETED)) {
+        // Rehash entries in expanded table
+        this.put(entry.getKey(), entry.getValue());
+      }
+    }
+  }
+  
+  /** Method put for class HashtableOpen.This key-value pair is inserted in the
+    * table and numKeys is incremented. If the key is already in the table, its 
+    * value is changed to the argument value and numKeys is not changed. 
+    * 
+    * If the LOAD_THRESHOLD is exceeded, the table is expanded using method rehash()
+    * 
+    * @param key The key of item being inserted
+    * @param value The value for this key
+    * @return Old value associated with this key if found;
+    * otherwise, null
+    */
+  public V put(K key, V value) {
+    /** #1 COMPLETE ME: ********************************************************************************************   
+      * PS: use value returned by "find" method to determine if key is new; if so 
+      *  1- insert in correct spot, 
+      *  2- increment numKeys by one, 
+      *  3- use the code below to check if rehashing is needed,  
+                 double loadFactor = (double) (numKeys) / table.length;
+                 if (loadFactor > LOAD_THRESHOLD){
+                       rehash();
+                 }
+      *  4- and return null
+      * Otherwise, replace old value for this key with new one and return old one
+      */ 
+    int index = find(key);
+    Entry entry = (Entry) table[index];
+    if (entry != null) {
+      V oldV = entry.getValue();
+      entry.setValue(value);
+      return oldV;
+    } else {
+      table[index] = new Entry(key, value);
+      numKeys++;
+      double loadFactor = (double) (numKeys) / table.length;
+      if (loadFactor > LOAD_THRESHOLD){
+        rehash();
+      }
+      return null;
+    }
+  }
+  
+  /** Method get for class HashtableOpen.
+    * @param key The key being sought
+    * @return the value associated with this key if found;otherwise, null
+    */
+  public V get(K key) {
+    /** #2 COMPLETE ME: ********************************************************************************************
+      PS: use the value returned by the "find" method to decide what to return */
+    int index = find(key);
+    Entry e = (Entry) table[index];
+    return e != null ? e.getValue() : null;
+  }
+  
+  /** Returns true if parameter value exists in Map as an Entry value*/
+  public boolean containsValue(V value){
+    /** #3 COMPLETE ME: ********************************************************************************************
+      * PS: use an enhanced for loop to iterate over keys similar to the toString method above*/
+    for (K key : this.keySet()) {
+      if (this.get(key).equals(value))
+        return true;
+    }
+    return false;
+  }
+  
+  /** Returns true if parameter key exists in Map as an Entry key*/
+  public boolean containsKey(K key){  
+    /** #4 COMPLETE ME: ********************************************************************************************   
+      * PS: how about using the get method? */
+    return this.get(key) != null ? true : false;
+  }
+  
+  /** Remove the item with a given key value
+    *  @param key The key to be removed
+    *  @return The value associated with this key, or null
+    *  if the key is not in the table.
+    */
+  public V remove(K key) {
+    /** #5 COMPLETE ME: ********************************************************************************************
+      * PS: use the value returned by the "find" method to decide what to do. 
+      * Remove an entry by setting it to DELETED
+      * If you delete, remember to decrement numKeys by one.
+      */  
+    int index = find(key);  
+    Entry entry = (Entry) table[index];
+    if (entry == null) 
+      return null;
+    else {
+      V oldV = entry.getValue();
+      table[index] = DELETED;
+      numKeys--;
+      return oldV;
+    }
+  }
+  
+  
+  public class Entry{   
+    /** The key */
+    private K key;
+    
+    /** The value */
+    private V value;
+    
+    /** Creates a en empty entry.
+      */
+    public Entry() { }
+    
+    /** Creates a new key-value pair.
+      * @param key The key
+      * @param value The value
+      */
+    public Entry(K key, V value) {
+      this.key = key;
+      this.value = value;
+    }
+    
+    /** Retrieves the key.
+      * @return The key
+      */
+    public K getKey() {
+      return this.key;
+    }
+    
+    /** Retrieves the value.
+      * @return The value
+      */
+    public V getValue() {
+      return this.value;
+    }
+    
+    /** Sets the value.
+      * @param val The new value
+      * @return The old value
+      */
+    public V setValue(V val) {
+      V oldVal = value;
+      this.value = val;
+      return oldVal;
+    }
+  }
+}
+
+

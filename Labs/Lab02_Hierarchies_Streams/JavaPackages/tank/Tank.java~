@@ -1,0 +1,76 @@
+/*
+ * File: Tank.java
+ */
+
+package tank;
+
+/** 
+ * Tank is an interface for objects that hold a quantity of some substance
+ * up to a maximum capacity.
+ * 
+ * @author John Miller, Imad Rahal and J. Andrew Holey
+ * @version September 02, 2022
+ */
+public interface Tank
+{
+  /**
+   * Put general description of the method here
+   *
+   * @param parameter-name description of parameter     // delete if not needed
+   * @return description of the return value           // delete if not needed
+   * @throws exception-name clear description of when 
+   *   exception is thrown                              // delete if not needed
+   */
+  public boolean isEmpty();
+  
+  /**
+   * Put general description of the method here
+   *
+   * @param parameter-name description of parameter     // delete if not needed
+   * @return description of the return value            // delete if not needed
+   * @throws exception-name clear description of when 
+   *         exception is thrown                       // delete if not needed
+   */
+  public boolean isFull();
+  
+  /**
+   * Put general description of the method here
+   *
+   * @param parameter-name description of parameter     // delete if not needed
+   * @return description of the return value           // delete if not needed
+   * @throws exception-name clear description of when 
+   *   exception is thrown                             // delete if not needed
+   */
+  public double getCapacity();
+  
+  /**
+   * Put general description of the method here
+   *
+   * @param parameter-name description of parameter     // delete if not needed
+   * @return description of the return value            // delete if not needed
+   * @throws exception-name clear description of when 
+   *   exception is thrown      // delete if not needed
+   */
+  public double getLevel();
+ 
+  /**
+   * Put general description of the method here
+   *
+   * @param parameter-name description of parameter     // delete if not needed
+   * @return description of the return value            // delete if not needed
+   * @throws exception-name clear description of when 
+   *   exception is thrown      // delete if not needed
+   */
+  public void add(double amount);
+  
+  /**
+   * Put general description of the method here
+   *
+   * @param parameter-name description of parameter     // delete if not needed
+   * @return description of the return value            // delete if not needed
+   * @throws exception-name clear description of when 
+   *   exception is thrown                              // delete if not needed
+   */
+  public void remove(double amount);
+
+}

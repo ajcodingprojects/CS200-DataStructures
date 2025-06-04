@@ -1,0 +1,186 @@
+/*
+ * File: AJNLinkedbinarySearchTree.java
+ */
+package ajnstructures;
+
+import java.util.*;
+import zhstructures.*;
+
+/**
+ * Class implementing a ZHBinarySearchTree using an internal
+ * one-way linked structure/node.
+ * 
+ * @author Andrew Nerud, Colin Glynn
+ * @version November 9, 2022
+ */
+public class AJNLinkedBinarySearchTree<E extends Comparable<E>> implements ZHBinarySearchTree<E> {
+  
+  /**
+   * Local field for the root of the binary search tree that is a BSTNode
+   */
+  private BSTNode root;
+  
+  /**
+   * Local field to keep track of the size of the BST
+   */
+  private int size;
+  
+  /**
+   * Default constructor for the BST that instantiates the local fields 
+   */
+  public AJNLinkedBinarySearchTree() {
+    this.root = new BSTNode();
+    this.size = 0;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean add(E element) {
+    return this.root.add(element);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean contains(E element) {
+    return this.root.contains(element);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public E get(E element) {
+    return this.root.get(element);
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEmpty() {
+    return size <= 0; 
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public Iterator<E> iterator() {
+    return this.root.iterator();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean remove(E element) {
+    return false;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public int size() {
+    return this.size;
+  }
+  
+  /**
+   * The inner node class for the binary search tree that extends ZHBinaryTreeNode
+   */
+  private class BSTNode extends ZHBinaryTreeNode<E, BSTNode> {
+    
+    /**
+     * Default constructor for the BSTNode class that instantiates the local fields 
+     */
+    public BSTNode() {
+      super();
+    }
+    
+    /**
+     * Second constructor for the BSTNode class that instantiates the local fields 
+     * 
+     * @param element an E of the value the BSTNode stores
+     */
+    public BSTNode(E element) {
+      super(element);
+    }
+    
+    /**
+     * Third constructor for the BSTNode class that instantiates the local fields 
+     * 
+     * @param element an E of the value the BSTNode stores
+     * @param leftChild a BSTNode that is the leftChild reference node
+     * @param rightChild a BSTNode that is the rightChild reference node
+     */
+    public BSTNode(E element, BSTNode leftChild, BSTNode rightChild) {
+      super(leftChild, element, rightChild);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    private boolean add(E element) {
+      if (this.isTerminal()) {
+        this.element = element;
+        this.leftChild = new BSTNode();
+        this.rightChild = new BSTNode();
+        this.size++;
+      }
+      
+      int compared = this.element.compareTo(element);
+      if (compared == 0)
+        return false;
+      else if (compared < 0)
+        return this.rightChild.add(element);
+      else
+        return this.leftChild.add(element);
+      
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean contains(E element) {
+      if (this.isTerminal())
+        return false;
+      
+      int compared = this.element.compareTo(element);
+      if (compared == 0)
+        return true;
+      else if (compared < 0)
+        return this.rightChild.contains(element);
+      else
+        return this.leftChild.contains(element);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public E get(E element) {
+      if (this.isTerminal())
+        return null;
+      
+      int compared = this.element.compareTo(element);
+      if (compared == 0)
+        return this.element;
+      else if (compared < 0)
+        return this.rightChild.get(element);
+      else
+        return this.leftChild.get(element);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Iterator<E> iterator() {
+      return this.inorderIterator();
+    }
+    
+    /**
+     * Method to check if the current node is terminal
+     */
+    public boolean isTerminal() {
+      return null == this.element && null == this.leftChild && null == this.rightChild;
+    }
+  }
+}

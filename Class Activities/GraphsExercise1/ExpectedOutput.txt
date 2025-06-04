@@ -1,0 +1,159 @@
+Welcome to DrJava.  Working directory is C:\Users\irahh\OneDrive - College of Saint Benedict - Saint John's University\AY22-23Courses\FA22-CSCI-200\Code\ClassActivities\Collections\Graphs\GraphsExercise1_UsingMaps\SOLUTION
+> run GraphDriver
+*********************************** Weighted, Undirected 
+Graph g has 6 vertices
+Is graph directed?  false
+Show all edges:
+[(0, 1): 1.1]
+[(0, 3): 2.3]
+[(1, 0): 1.1]
+[(1, 3): 3.0]
+[(1, 4): 2.5]
+[(2, 4): 2.3]
+[(2, 5): 12.4]
+[(3, 1): 3.0]
+[(3, 0): 2.3]
+[(3, 4): 0.9]
+[(4, 1): 2.5]
+[(4, 2): 2.3]
+[(4, 3): 0.9]
+[(5, 5): 0.0]
+[(5, 2): 12.4]
+
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 2.3]
+is there an edge (0,5)? false
+Test: g.getEdge(0,5):[(0, 5): Infinity]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+After insertion: g.insert(new Edge(0,5,9.4))
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 2.3]
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 9.4]
+is there an edge (5,0)? true
+Test: g.getEdge(5,0):[(5, 0): 9.4]
+
+After insertion: g.insert(new Edge(0,5,10.4))
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 10.4]
+is there an edge (5,0)? true
+Test: g.getEdge(5,0):[(5, 0): 10.4]
+
+
+
+*********************************** Weighted, Directed  
+Graph g has 6 vertices
+Is graph directed?  true
+Show all edges:
+[(0, 1): 1.1]
+[(0, 3): 2.3]
+[(1, 4): 2.5]
+[(2, 4): 2.3]
+[(2, 5): 12.4]
+[(3, 1): 3.0]
+[(4, 3): 0.9]
+[(5, 5): 0.0]
+
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 2.3]
+is there an edge (0,5)? false
+Test: g.getEdge(0,5):[(0, 5): Infinity]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+After insertion: g.insert(new Edge(0,5,9.4))
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 2.3]
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 9.4]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+After insertion: g.insert(new Edge(0,5,10.4))
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 10.4]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+
+
+*********************************** Unweighted, Undirected 
+Graph g has 6 vertices
+Is graph directed?  false
+Show all edges:
+[(0, 1): 1.0]
+[(0, 3): 1.0]
+[(1, 0): 1.0]
+[(1, 3): 1.0]
+[(1, 4): 1.0]
+[(2, 4): 1.0]
+[(2, 5): 1.0]
+[(3, 1): 1.0]
+[(3, 0): 1.0]
+[(3, 4): 1.0]
+[(4, 1): 1.0]
+[(4, 2): 1.0]
+[(4, 3): 1.0]
+[(5, 5): 1.0]
+[(5, 2): 1.0]
+
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 1.0]
+is there an edge (0,5)? false
+Test: g.getEdge(0,5):[(0, 5): Infinity]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+After insertion: g.insert(new Edge(0,5,9.4))
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 1.0]
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 9.4]
+is there an edge (5,0)? true
+Test: g.getEdge(5,0):[(5, 0): 9.4]
+
+After insertion: g.insert(new Edge(0,5,10.4))
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 10.4]
+is there an edge (5,0)? true
+Test: g.getEdge(5,0):[(5, 0): 10.4]
+
+
+
+*********************************** Unweighted, Directed 
+Graph g has 6 vertices
+Is graph directed?  true
+Show all edges:
+[(0, 1): 1.0]
+[(0, 3): 1.0]
+[(1, 4): 1.0]
+[(2, 4): 1.0]
+[(2, 5): 1.0]
+[(3, 1): 1.0]
+[(4, 3): 1.0]
+[(5, 5): 1.0]
+
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 1.0]
+is there an edge (0,5)? false
+Test: g.getEdge(0,5):[(0, 5): Infinity]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+After insertion: g.insert(new Edge(0,5,9.4))
+is there an edge (0,3)? true
+Test: g.getEdge(0,3):[(0, 3): 1.0]
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 9.4]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+After insertion: g.insert(new Edge(0,5,10.4))
+is there an edge (0,5)? true
+Test: g.getEdge(0,5):[(0, 5): 10.4]
+is there an edge (5,0)? false
+Test: g.getEdge(5,0):[(5, 0): Infinity]
+
+> 

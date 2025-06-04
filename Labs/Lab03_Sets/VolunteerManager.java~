@@ -1,0 +1,87 @@
+import java.util.*;
+import java.util.stream.*;
+import worker.*;
+import javax.swing.*;
+import java.io.*;
+
+/**
+ * This class implements a program that manages a set of workers.
+ *
+ * @author J. Miller, J. A. Holey and Andrew Nerud and Grant Peroutka
+ * @version TODAY'S DATE
+ */
+public class VolunteerManager{
+  
+  private Volunteer volunteer;
+
+  public VolunteerManager(Volunteer v){
+    volunteer = v;
+  }
+  
+  public void addHours(int numHours){
+    volunteer.addHours(numHours);
+  }
+  
+  public void resetHours(){
+    volunteer.resetHours();
+  }
+    
+  public void viewHours(){
+    System.out.println("The number of hours is: " + volunteer.getHours());
+  }
+  
+   public void runManager() {
+    char cmd;
+    do
+    {
+      menu ();
+      cmd = acceptCommand ();
+      doCommand (cmd);
+    }
+    while ((cmd != 'q') && (cmd != 'Q'));
+  }
+  
+  private void menu() {
+    System.out.println();
+    System.out.println("\tA Add hours for volunteer ");
+    System.out.println("\tV View hours for volunteer ");
+    System.out.println("\tR Reset hours for volunteer ");
+    System.out.println("\tQ Quit the program");
+    System.out.println();
+  }
+  
+  private char acceptCommand() {
+    char cmd;
+    String s = JOptionPane.showInputDialog("Enter command: ");
+    cmd = s.charAt(0);
+    return cmd;
+  }
+  
+  private void doCommand(char cmd) {
+    switch (cmd)
+    {
+      case 'a': case 'A':
+        int hours = Integer.parseInt(JOptionPane.showInputDialog("Hours to add: "));
+        addHours(hours);
+        break;
+      case 'v': case 'V':
+        viewHours();
+        break;
+      case 'r': case 'R':
+        resetHours();
+        break;
+      case 'q': case 'Q':
+        quit ();
+        break;
+      default:
+        System.out.println("Invalid command--try again");
+    }
+  }
+   /** quit
+    * Method to terminate the WorkerManager program
+    */
+  private void quit() {        
+    System.out.println("Now exiting the volunteer manager\n");
+  }
+}
+

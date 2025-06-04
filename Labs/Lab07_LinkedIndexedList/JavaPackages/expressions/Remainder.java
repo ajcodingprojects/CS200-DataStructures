@@ -1,0 +1,41 @@
+/*
+ * File: Remainder.java
+ */
+
+package expressions;
+
+/**
+ * Class that represents the Remainder or Modulus Operator
+ * 
+ * @author I. Rahal
+ * @version September 24, 2022
+ */
+public class Remainder extends Operator{
+  
+  /**
+   * a constant to store the precedece for this operator
+   */
+  private static final int precedence = 2;
+  
+  /**
+   * {@inheritDoc} 
+   */
+  public int getPrecedence(){
+    return precedence;
+  }
+  
+  /**
+   * {@inheritDoc} 
+   */
+  public Operand evaluate(Operand op1, Operand op2){
+    return new IntegerLiteral(op1.getValue()%op2.getValue());
+  }
+  
+  /**
+   * {@inheritDoc} 
+   */
+  public String toString(){
+    return "%";
+  }
+  
+}
