@@ -1,0 +1,128 @@
+/**
+ * AJNTreeMap.java
+ */
+
+import java.util.*;
+import zhstructures.*;
+import ajnstructures.*;
+
+/**
+ * Authors: Andrew Nerud, Colin Glynn
+ * Date: 11/17/2022
+ */
+public class AJNTreeMap<KeyType extends Comparable<KeyType>, ValueType> implements ZHMap<KeyType, ValueType> {
+  
+  /**
+   * The map inner field to keep track of the map
+   */
+  private ZHBinarySearchTree<ZHComparableKeyPair<KeyType, ValueType>> innerTree;
+  
+  /**
+   * The constructor for the AJNTreeMap that initializes the innerTree
+   */
+  public AJNTreeMap() {
+    this.innerTree = new AJNLinkedBinarySearchTree<>();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean contains(KeyType key) {
+    return innerTree.contains(new ZHComparableKeyPair(key, null));
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public ValueType get(KeyType key) {
+    ZHComparableKeyPair<KeyType, ValueType> foundPair = innerTree.get(new ZHComparableKeyPair(key, null));
+    return foundPair == null ? null : (ValueType)foundPair.getValue();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public ValueType remove(KeyType key) {
+    ValueType toReturn = get(key);
+    innerTree.remove(new ZHComparableKeyPair(key, null));
+    return toReturn;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public ValueType put(KeyType key, ValueType value) {
+    ZHComparableKeyPair<KeyType, ValueType> foundPair = innerTree.get(new ZHComparableKeyPair(key, null));
+    if (foundPair == null) {
+      innerTree.add(new ZHComparableKeyPair(key, value));
+      return null;
+    } else {
+      ValueType returnVal = foundPair.getValue();
+      foundPair.setValue(value);
+      return returnVal;
+    }
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public int size() {
+    return innerTree.size();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEmpty() {
+    return innerTree.isEmpty();
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public Iterator<KeyType> iterator() {
+    return new MapIterator();
+  }
+  
+  /**
+   * An iterator that returns the keys of this map in order,
+   * using a tree iterator.
+   */
+  protected class MapIterator implements Iterator<KeyType> {
+    
+    protected Iterator<ZHComparableKeyPair<KeyType, ValueType>> iter;
+    
+    /**
+     * Constructs a new inorder iterator
+     * over the keys of this map.
+     */
+    public MapIterator() {
+      iter = innerTree.iterator();
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Iterator#hasNext()
+     */
+    public boolean hasNext() {
+      return iter.hasNext();
+    }
+    
+    /* (non-Javadoc)
+     * @see java.lang.Iterator#next()
+     */
+    public KeyType next() {
+      return iter.next().getKey();
+    }
+    
+    /**
+     * Unsupported operation
+     *
+     * @throw UnsupportedOperationException
+     * @see java.lang.Iterator#remove()
+     */
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
+  }
+}
+
